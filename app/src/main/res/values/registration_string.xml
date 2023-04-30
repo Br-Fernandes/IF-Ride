@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_register">Registrar-se</string>
+    <string name="registration_input">Matrícula</string>
+    <string name="name_input">Nome Completo</string>
+    <string name="email_input">Email</string>
+    <string name="phone_input">Telefone</string>
+    <string name="password_input">Senha</string>
+    <string name="password_repeate_input">Repita a Senha</string>
+    <string name="text_login_activity_1">Já possui uma conta?</string>
+    <string name="text_login_activity_2">  Clique aqui</string>
+    <string name="btn_submit_register">Cadastrar</string>
+</resources>

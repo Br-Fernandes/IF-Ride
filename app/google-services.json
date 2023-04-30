@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "875575287973",
+    "project_id": "if-ride",
+    "storage_bucket": "if-ride.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875575287973:android:b6f53d128a2822dc49ed4c",
+        "android_client_info": {
+          "package_name": "com.example.cesar.ifride"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "875575287973-ve8ugdngp7maqme0rqr0ul8lcg0jkgui.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgu4MO1im6p1N60Sye-3_7XI-RH53QdBQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "875575287973-ve8ugdngp7maqme0rqr0ul8lcg0jkgui.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
