@@ -11,6 +11,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.example.cesar.ifride.utils.Validation as Validation
 
 
 class RegisterActivity : AppCompatActivity() {
@@ -25,6 +26,7 @@ class RegisterActivity : AppCompatActivity() {
         val db = Firebase.firestore
 
         binding.btnSubmitRegister.setOnClickListener {
+            Log.d(TAG, "sjkdhfjksadfjsahfjksahkjfjkshfjksahfjksajkf ABROBRA")
             register(db)
         }
 
@@ -58,12 +60,13 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     fun validatingInputs(): Boolean {
-        return  !binding.etRegistration.text.toString().trim().isEmpty() &&
-                !binding.etName.text.toString().trim().isEmpty() &&
-                !binding.etEmail.text.toString().trim().isEmpty() &&
-                !binding.etPhone.text.toString().trim().isEmpty() &&
-                !binding.etPassword.text.toString().trim().isEmpty() &&
-                !binding.etRepeatPassword.text.toString().trim().isEmpty()
+        val validation = Validation()
+
+        return  validation.registrationValidation(binding.etRegistration.text.toString().trim()) &&
+                validation.nameValidation(binding.etName.text.toString().trim()) &&
+                validation.emailValidation(binding.etEmail.text.toString().trim()) &&
+                validation.phoneValidation(binding.etPhone.text.toString().trim()) &&
+                validation.passwordValidation(binding.etPassword.text.toString().trim(), binding.etRepeatPassword.text.toString().trim())
     }
 
     private fun openLoginActivity() {
