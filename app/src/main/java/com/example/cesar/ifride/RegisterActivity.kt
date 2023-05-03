@@ -2,7 +2,6 @@ package com.example.cesar.ifride
 
 import android.content.ContentValues.TAG
 import android.content.Intent
-import android.nfc.Tag
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
