@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.cesar.ifride.databinding.ActivityRegisterBinding
+import com.example.cesar.ifride.entities.UserInfo
+import com.example.cesar.ifride.utils.RestApiService
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -45,6 +47,14 @@ class RegisterActivity : AppCompatActivity() {
             "isDriver" to false
         )
 
+        val userInfo = UserInfo(
+            userName = binding.etName.text.toString().trim(),
+            userEmail = binding.etEmail.text.toString().trim(),
+            userPhone = binding.etPhone.text.toString().trim()
+        )
+
+        val apiService = RestApiService()
+
         if (validatingInputs()) {
             db.collection("Users")
                 .document(registrationNumber)
@@ -55,6 +65,14 @@ class RegisterActivity : AppCompatActivity() {
                 .addOnFailureListener { e ->
                     Log.w(TAG, "Error adding document", e)
                 }
+        }
+
+        apiService.addUser(userInfo) {
+            if (it?.userEmail != null) {
+                print("\n\n\n\nSuccess registering new user")
+            } else {
+                print("\n\n\n\nError registering new user")
+            }
         }
     }
 
