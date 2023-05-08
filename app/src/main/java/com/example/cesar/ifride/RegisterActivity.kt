@@ -65,6 +65,8 @@ class RegisterActivity : AppCompatActivity() {
                 .addOnFailureListener { e ->
                     Log.w(TAG, "Error adding document", e)
                 }
+        } else {
+            Log.d(TAG, "deu errado!!")
         }
 
         apiService.addUser(userInfo) {

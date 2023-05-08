@@ -7,8 +7,9 @@ class Validation {
     }
 
     fun nameValidation(name: String): Boolean {
-        return name.isNotEmpty() && name.all { it.isLetter() }
+        return name.isNotEmpty() && name.all { it.isLetter() || it.isWhitespace() }
     }
+
 
     fun emailValidation(email: String): Boolean {
         val emailRegex = Regex("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9\\-\\.]+)\\.([a-zA-Z]{2,5})\$")
@@ -22,5 +23,4 @@ class Validation {
     fun passwordValidation(password: String, password2: String): Boolean {
         return password.isNotEmpty() && password2.isNotEmpty() && password == password2
     }
-
 }
