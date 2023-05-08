@@ -4,18 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RidesActivity">
+    tools:context=".RidesActivity"
+    android:background="@color/light_blue">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/ll_options_directions"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="96dp"
+        android:layout_marginRight="96dp">
+
+        <TextView
+            android:id="@+id/txt_one_way_option"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/txt_one_way"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:background="@drawable/border_directions_left" />
+
+        <TextView
+            android:id="@+id/txt_return_option"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/txt_return"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            android:background="@drawable/border_directions_right" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_results"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/ll_options_directions">
+
+    </LinearLayout>
+
+    <!-- <TextView
         android:id="@+id/txt_one_way_ride"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:textColor="@color/black"
-        android:layout_marginRight="10dp" />
+        android:layout_marginRight="10dp" /> -->
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/ll_one_way_ride"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -41,6 +83,6 @@
         app:layout_constraintTop_toBottomOf="@+id/txt_return_ride"
         android:orientation="vertical">
 
-    </LinearLayout>
+    </LinearLayout> -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

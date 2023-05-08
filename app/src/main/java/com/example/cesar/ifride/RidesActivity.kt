@@ -1,20 +1,27 @@
 package com.example.cesar.ifride
 
 import android.content.ContentValues.TAG
+import android.graphics.Color
+
 import androidx.appcompat.app.AppCompatActivity
+
 import android.os.Bundle
+
 import android.util.Log
 import android.view.Gravity
+
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
+import androidx.core.view.get
+
 import com.example.cesar.ifride.databinding.ActivityRidesBinding
 import com.example.cesar.ifride.models.RideModel
-import com.example.cesar.ifride.utils.CustomLayouts
 import com.example.cesar.ifride.utils.CustomLayouts.Companion.dpToPx
+
 import com.google.firebase.FirebaseApp
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -33,27 +40,28 @@ class RidesActivity : AppCompatActivity() {
 
         chosenCity = intent.getStringExtra("city").toString()
 
-        putAvailableRides()
+        putOneWayRides()
+
+        binding.txtOneWayOption.setOnClickListener{
+            putOneWayRides()
+        }
+
+        binding.txtReturnOption.setOnClickListener{
+            putReturnRides()
+        }
     }
 
-    private fun putAvailableRides() {
+    private fun putOneWayRides() {
         val queryOneWay = db.collection("Rides")
             .whereEqualTo("city", chosenCity)
             .whereEqualTo("direction", "Ida")
 
-        val queryReturn = db.collection("Rides")
-            .whereEqualTo("city", chosenCity)
-            .whereEqualTo("direction", "Volta")
+        val linearLayout = binding.llResults
 
-
-        putOneWayRides(queryOneWay)
-        putReturnRides(queryReturn)
-    }
-
-
-    private fun putOneWayRides(queryOneWay: Query) {
-        binding.txtOneWayRide.text = "$chosenCity - Caronas Campus Urutaí"
-        val linearLayout = binding.llOneWayRide
+        for (i in 0 until linearLayout.childCount){
+            val childView = linearLayout.getChildAt(i)
+            linearLayout.removeView(childView)
+        }
 
         queryOneWay.get()
             .addOnSuccessListener { documents ->
@@ -64,16 +72,25 @@ class RidesActivity : AppCompatActivity() {
                     linearLayout.addView(putRide(ride))
                     Log.d(TAG, "deu bão")
                 }
-
             }
             .addOnFailureListener {exception ->
                 Log.d(TAG, "deu ruim", exception)
             }
+
+        personalizeBtn(binding.txtOneWayOption)
     }
 
-    private fun putReturnRides(queryReturn: Query) {
-        binding.txtOneWayRide.text = "Caronas Campus Urutaí - $chosenCity"
-        val linearLayout = binding.llOneWayRide
+    private fun putReturnRides() {
+        val queryReturn = db.collection("Rides")
+            .whereEqualTo("city", chosenCity)
+            .whereEqualTo("direction", "Volta")
+
+        val linearLayout = binding.llResults
+
+        for (i in 0 until linearLayout.childCount){
+            val childView = linearLayout.getChildAt(i)
+            linearLayout.removeView(childView)
+        }
 
         queryReturn.get()
             .addOnSuccessListener { documents ->
@@ -86,6 +103,7 @@ class RidesActivity : AppCompatActivity() {
             Log.d(TAG, "deu ruim também", exception)
         }
 
+        personalizeBtn(binding.txtReturnOption)
     }
 
     private fun putRide(ride: RideModel): LinearLayout {
@@ -132,6 +150,22 @@ class RidesActivity : AppCompatActivity() {
         }
 
         return newLinearLayout
+    }
+
+    private fun personalizeBtn(txtView: TextView) {
+        val linearLayout = binding.llOptionsDirections
+        val currentIndex = linearLayout.indexOfChild(txtView)
+        val previousTextView = linearLayout.getChildAt(currentIndex - 1)
+        val nextTextView = linearLayout.getChildAt(currentIndex + 1)
+
+        if (txtView.text == "Ida") {
+            txtView.setBackgroundResource(R.drawable.border_directions_left_selected)
+            nextTextView.setBackgroundResource(R.drawable.border_directions_right)
+        } else {
+            txtView.setBackgroundResource(R.drawable.border_directions_right_selected)
+            previousTextView.setBackgroundResource(R.drawable.border_directions_left)
+        }
+
     }
 
 }

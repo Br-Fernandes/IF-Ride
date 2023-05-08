@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="txt_one_way">Ida</string>
+    <string name="txt_return">Volta</string>
+</resources>
