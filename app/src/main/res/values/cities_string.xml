@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_cities">Selecione uma cidade</string>
+    <string name="ipameri">Ipameri</string>
+    <string name="orizona">Orizona</string>
+    <string name="palmelo">Palmelo</string>
+    <string name="pires_rio">Pires do Rio</string>
+    <string name="santa_cruz">Santa Cruz</string>
+    <string name="urutai">Urutaí</string>
+
+
+</resources>
