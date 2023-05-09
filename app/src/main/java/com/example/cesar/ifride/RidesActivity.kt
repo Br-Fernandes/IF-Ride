@@ -1,29 +1,32 @@
 package com.example.cesar.ifride
 
 import android.content.ContentValues.TAG
-import android.graphics.Color
 
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
+import android.text.Layout.Alignment
 
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
-import androidx.core.view.get
+
 
 import com.example.cesar.ifride.databinding.ActivityRidesBinding
 import com.example.cesar.ifride.models.RideModel
+
 import com.example.cesar.ifride.utils.CustomLayouts.Companion.dpToPx
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import org.w3c.dom.Text
 
 class RidesActivity : AppCompatActivity() {
 
@@ -65,12 +68,10 @@ class RidesActivity : AppCompatActivity() {
 
         queryOneWay.get()
             .addOnSuccessListener { documents ->
-
                 for(document in documents) {
-
-                    val ride  = document.toObject(RideModel::class.java)
+                    val ride = document.toObject(RideModel::class.java)
                     linearLayout.addView(putRide(ride))
-                    Log.d(TAG, "deu bão")
+
                 }
             }
             .addOnFailureListener {exception ->
@@ -94,7 +95,6 @@ class RidesActivity : AppCompatActivity() {
 
         queryReturn.get()
             .addOnSuccessListener { documents ->
-                Log.d(TAG, "deu bão também")
                 for(document in documents) {
                     val ride  = document.toObject(RideModel::class.java)
                     linearLayout.addView(putRide(ride))
@@ -114,21 +114,23 @@ class RidesActivity : AppCompatActivity() {
         hourRide.apply {
             text = ride.dateHour.toString()
             textSize = 20f
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
             gravity = Gravity.CENTER
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.MATCH_PARENT,
                 1f
             )
         }
 
         driverRide.apply {
-            text = ride.driverName
+            text = "Preço: \n${ride.price.toString()}"
             textSize = 25f
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
             gravity = Gravity.CENTER
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.MATCH_PARENT,
                 1f
             )
         }
@@ -137,7 +139,7 @@ class RidesActivity : AppCompatActivity() {
             background = resources.getDrawable(R.drawable.border_rides)
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                dpToPx(this@RidesActivity, 60f).toInt()
+                dpToPx(this@RidesActivity, 80f).toInt()
             ).apply {
                 setMargins(dpToPx(this@RidesActivity, 15f).toInt(),
                         dpToPx(this@RidesActivity, 15f).toInt(),
@@ -155,17 +157,23 @@ class RidesActivity : AppCompatActivity() {
     private fun personalizeBtn(txtView: TextView) {
         val linearLayout = binding.llOptionsDirections
         val currentIndex = linearLayout.indexOfChild(txtView)
-        val previousTextView = linearLayout.getChildAt(currentIndex - 1)
-        val nextTextView = linearLayout.getChildAt(currentIndex + 1)
+        val previousTextView: TextView? = linearLayout.getChildAt(currentIndex - 1) as? TextView
+        val nextTextView: TextView? = linearLayout.getChildAt(currentIndex + 1) as? TextView
+
+        txtView.setTextColor(resources.getColor(R.color.white_smoke))
 
         if (txtView.text == "Ida") {
-            txtView.setBackgroundResource(R.drawable.border_directions_left_selected)
-            nextTextView.setBackgroundResource(R.drawable.border_directions_right)
+            if (nextTextView != null) {
+                txtView.setBackgroundResource(R.drawable.border_directions_left_selected)
+                nextTextView.setBackgroundResource(R.drawable.border_directions_right)
+                nextTextView.setTextColor(resources.getColor(R.color.solid_gray))
+            }
         } else {
-            txtView.setBackgroundResource(R.drawable.border_directions_right_selected)
-            previousTextView.setBackgroundResource(R.drawable.border_directions_left)
+            if (previousTextView != null) {
+                txtView.setBackgroundResource(R.drawable.border_directions_right_selected)
+                previousTextView.setBackgroundResource(R.drawable.border_directions_left)
+                previousTextView.setTextColor(resources.getColor(R.color.solid_gray))
+            }
         }
-
     }
-
 }
