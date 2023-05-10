@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RidesActivity"
-    android:background="@color/solid_gray">
+    android:background="@color/dark_blue">
 
     <LinearLayout
         android:id="@+id/ll_options_directions"
