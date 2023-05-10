@@ -1,5 +1,6 @@
 package com.example.cesar.ifride.entities
 
+
 import com.google.gson.annotations.SerializedName
 
 data class UserInfo (
