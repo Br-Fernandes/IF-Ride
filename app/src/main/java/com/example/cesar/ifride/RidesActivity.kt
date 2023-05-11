@@ -1,11 +1,12 @@
 package com.example.cesar.ifride
 
+import android.animation.Animator
+import android.animation.ValueAnimator
 import android.content.ContentValues.TAG
 
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
-import android.text.Layout.Alignment
 
 import android.util.Log
 import android.view.Gravity
@@ -14,7 +15,6 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 
-
 import com.example.cesar.ifride.databinding.ActivityRidesBinding
 import com.example.cesar.ifride.models.RideModel
 
@@ -22,11 +22,8 @@ import com.example.cesar.ifride.utils.CustomLayouts.Companion.dpToPx
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import org.w3c.dom.Text
 
 class RidesActivity : AppCompatActivity() {
 
@@ -151,6 +148,7 @@ class RidesActivity : AppCompatActivity() {
             addView(driverRide)
         }
 
+        onOpenRideInformatins(newLinearLayout)
         return newLinearLayout
     }
 
@@ -174,6 +172,22 @@ class RidesActivity : AppCompatActivity() {
                 previousTextView.setBackgroundResource(R.drawable.border_directions_left)
                 previousTextView.setTextColor(resources.getColor(R.color.solid_gray))
             }
+        }
+    }
+
+    private fun onOpenRideInformatins(rideLayout: LinearLayout) {
+        rideLayout.setOnClickListener {
+            val animator = ValueAnimator.ofInt(
+                dpToPx(this,80f).toInt(),
+                dpToPx(this,240f).toInt())
+            animator.duration = 1000
+
+            animator.addUpdateListener { animation ->
+                val height =animation.animatedValue as Int
+                rideLayout.layoutParams.height = height
+                rideLayout.requestLayout()
+            }
+            animator.start()
         }
     }
 }
