@@ -6,7 +6,6 @@ class Util {
 
     fun dateTimeFromTimestamp(timestamp: Timestamp) {
         val tdate = timestamp.toDate()
-        
     }
 
 }
