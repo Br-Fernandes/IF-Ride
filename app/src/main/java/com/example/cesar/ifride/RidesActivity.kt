@@ -1,6 +1,5 @@
 package com.example.cesar.ifride
 
-import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.ContentValues.TAG
 
@@ -11,14 +10,18 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.widget.ImageView
 
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 
 import com.example.cesar.ifride.databinding.ActivityRidesBinding
 import com.example.cesar.ifride.models.RideModel
 
-import com.example.cesar.ifride.utils.CustomLayouts.Companion.dpToPx
+import com.example.cesar.ifride.utils.Util.Companion.dpToPx
+import com.example.cesar.ifride.utils.Util.Companion.removeLinearLayoutChildren
+import com.example.cesar.ifride.utils.Util.Companion.standardLinearLayout
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
@@ -58,10 +61,7 @@ class RidesActivity : AppCompatActivity() {
 
         val linearLayout = binding.llResults
 
-        for (i in 0 until linearLayout.childCount){
-            val childView = linearLayout.getChildAt(i)
-            linearLayout.removeView(childView)
-        }
+        removeLinearLayoutChildren(linearLayout)
 
         queryOneWay.get()
             .addOnSuccessListener { documents ->
@@ -85,10 +85,7 @@ class RidesActivity : AppCompatActivity() {
 
         val linearLayout = binding.llResults
 
-        for (i in 0 until linearLayout.childCount){
-            val childView = linearLayout.getChildAt(i)
-            linearLayout.removeView(childView)
-        }
+        removeLinearLayoutChildren(linearLayout)
 
         queryReturn.get()
             .addOnSuccessListener { documents ->
@@ -148,7 +145,7 @@ class RidesActivity : AppCompatActivity() {
             addView(driverRide)
         }
 
-        onOpenRideInformatins(newLinearLayout)
+        onOpenRideInformatins(newLinearLayout, ride)
         return newLinearLayout
     }
 
@@ -175,19 +172,103 @@ class RidesActivity : AppCompatActivity() {
         }
     }
 
-    private fun onOpenRideInformatins(rideLayout: LinearLayout) {
-        rideLayout.setOnClickListener {
-            val animator = ValueAnimator.ofInt(
-                dpToPx(this,80f).toInt(),
-                dpToPx(this,240f).toInt())
-            animator.duration = 1000
+        private fun onOpenRideInformatins(rideLayout: LinearLayout, ride: RideModel) {
+            rideLayout.setOnClickListener {
+                val animator = ValueAnimator.ofInt(
+                    dpToPx(this,80f).toInt(),
+                    dpToPx(this,240f).toInt())
+                animator.duration = 1000
 
-            animator.addUpdateListener { animation ->
-                val height =animation.animatedValue as Int
-                rideLayout.layoutParams.height = height
-                rideLayout.requestLayout()
+                animator.addUpdateListener { animation ->
+                    val height = animation.animatedValue as Int
+                    rideLayout.layoutParams.height = height
+                    rideLayout.requestLayout()
+                }
+                animator.start()
+                removeLinearLayoutChildren(rideLayout)
+                putRideInformations(rideLayout, ride)
             }
-            animator.start()
         }
+
+    private fun putRideInformations(rideLayout: LinearLayout, ride: RideModel) {
+        rideLayout.orientation = LinearLayout.VERTICAL
+        var closeBtn = setCloseBtn()
+        var dateAndPrice =  setDateAndPrice(ride)
+        /*var driverAndSeats = setDriverAndSeats()
+        var confirmBtn = setConfirmBtn()*/
+        rideLayout.addView(closeBtn)
+        rideLayout.addView(dateAndPrice)
     }
+
+    private fun setCloseBtn(): LinearLayout {
+        var imageView = ImageView(this)
+        var linearLayout = standardLinearLayout(this@RidesActivity)
+
+        imageView.apply {
+            setImageDrawable(ContextCompat.getDrawable(this@RidesActivity, R.drawable.close_x))
+            background = resources.getDrawable(R.drawable.circle_border)
+            scaleType = ImageView.ScaleType.CENTER_INSIDE
+            foregroundGravity = Gravity.CENTER
+            layoutParams = LinearLayout.LayoutParams(
+                dpToPx(this@RidesActivity, 16f).toInt(),
+                dpToPx(this@RidesActivity, 16f).toInt()
+            ).apply {
+                setMargins(dpToPx(this@RidesActivity, 15f).toInt(),
+                            dpToPx(this@RidesActivity, 15f).toInt(),
+                            dpToPx(this@RidesActivity, 15f).toInt(),
+                            dpToPx(this@RidesActivity, 15f).toInt()
+                )
+            }
+        }
+        linearLayout.addView(imageView)
+
+        return linearLayout
+    }
+
+    private fun setDateAndPrice(ride: RideModel): LinearLayout {
+        var linearLayout = standardLinearLayout(this@RidesActivity)
+        var dateHour = TextView(this)
+        var price = TextView(this)
+
+        dateHour.apply {
+            text = ride.dateHour.toString()
+            layoutParams = LinearLayout.LayoutParams(
+                dpToPx(this@RidesActivity, 16f).toInt(),
+                dpToPx(this@RidesActivity, 16f).toInt()
+            ).apply {
+                setMargins(dpToPx(this@RidesActivity, 15f).toInt(),
+                    dpToPx(this@RidesActivity, 15f).toInt(),
+                    dpToPx(this@RidesActivity, 15f).toInt(),
+                    dpToPx(this@RidesActivity, 15f).toInt()
+                )
+            }
+        }
+
+        price.apply {
+            text = ride.price.toString()
+            layoutParams = LinearLayout.LayoutParams(
+                dpToPx(this@RidesActivity, 16f).toInt(),
+                dpToPx(this@RidesActivity, 16f).toInt()
+            ).apply {
+                setMargins(dpToPx(this@RidesActivity, 15f).toInt(),
+                    dpToPx(this@RidesActivity, 15f).toInt(),
+                    dpToPx(this@RidesActivity, 15f).toInt(),
+                    dpToPx(this@RidesActivity, 15f).toInt()
+                )
+            }
+        }
+        linearLayout.addView(dateHour)
+        linearLayout.addView(price)
+
+        return linearLayout
+    }
+    private fun setDriverAndSeats() {
+        TODO("Not yet implemented")
+    }
+
+    private fun setConfirmBtn() {
+
+    }
+
 }
+
