@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="date_hour_label">Data</string>
+    <string name="price_label">Preço</string>
+    <string name="driver_label">Motorista</string>
+    <string name="car_seats_label">Lugares Disponíveis</string>
+    <string name="confirm_ride_btn">Confirmar Carona</string>
+</resources>

@@ -10,11 +10,15 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.cesar.ifride.adapters.AdapterRide
 
 import com.example.cesar.ifride.databinding.ActivityRidesBinding
 import com.example.cesar.ifride.models.RideModel
@@ -33,6 +37,7 @@ class RidesActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRidesBinding
     private lateinit var db: FirebaseFirestore
     private lateinit var chosenCity: String
+    private lateinit var resultsRC: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +45,7 @@ class RidesActivity : AppCompatActivity() {
         setContentView(binding.root)
         FirebaseApp.initializeApp(this)
         db = Firebase.firestore
+        resultsRC = binding.rcResults
 
         chosenCity = intent.getStringExtra("city").toString()
 
@@ -55,98 +61,56 @@ class RidesActivity : AppCompatActivity() {
     }
 
     private fun putOneWayRides() {
+        resultsRC.removeAllViews()
+
+        val ridesList: MutableList<RideModel> = mutableListOf()
+
         val queryOneWay = db.collection("Rides")
             .whereEqualTo("city", chosenCity)
             .whereEqualTo("direction", "Ida")
-
-        val linearLayout = binding.llResults
-
-        removeLinearLayoutChildren(linearLayout)
 
         queryOneWay.get()
             .addOnSuccessListener { documents ->
                 for(document in documents) {
                     val ride = document.toObject(RideModel::class.java)
-                    linearLayout.addView(putRide(ride))
-
+                    ridesList.add(ride)
                 }
+                initRecyclerView(ridesList)
+
             }
             .addOnFailureListener {exception ->
                 Log.d(TAG, "deu ruim", exception)
             }
-
         personalizeBtn(binding.txtOneWayOption)
     }
 
     private fun putReturnRides() {
+        resultsRC.removeAllViews()
+
+       val ridesList: MutableList<RideModel> = mutableListOf()
+
         val queryReturn = db.collection("Rides")
             .whereEqualTo("city", chosenCity)
             .whereEqualTo("direction", "Volta")
-
-        val linearLayout = binding.llResults
-
-        removeLinearLayoutChildren(linearLayout)
 
         queryReturn.get()
             .addOnSuccessListener { documents ->
                 for(document in documents) {
                     val ride  = document.toObject(RideModel::class.java)
-                    linearLayout.addView(putRide(ride))
+                    ridesList.add(ride)
                 }
+                initRecyclerView(ridesList)
+
             }.addOnFailureListener {exception ->
             Log.d(TAG, "deu ruim também", exception)
         }
-
         personalizeBtn(binding.txtReturnOption)
     }
 
-    private fun putRide(ride: RideModel): LinearLayout {
-        val hourRide = TextView(this)
-        val driverRide = TextView(this)
-        val newLinearLayout = LinearLayout(this)
-
-        hourRide.apply {
-            text = ride.dateHour.toString()
-            textSize = 20f
-            textAlignment = View.TEXT_ALIGNMENT_CENTER
-            gravity = Gravity.CENTER
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                1f
-            )
-        }
-
-        driverRide.apply {
-            text = "Preço: \n${ride.price.toString()}"
-            textSize = 25f
-            textAlignment = View.TEXT_ALIGNMENT_CENTER
-            gravity = Gravity.CENTER
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                1f
-            )
-        }
-
-        newLinearLayout.apply {
-            background = resources.getDrawable(R.drawable.border_rides)
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                dpToPx(this@RidesActivity, 80f).toInt()
-            ).apply {
-                setMargins(dpToPx(this@RidesActivity, 15f).toInt(),
-                        dpToPx(this@RidesActivity, 15f).toInt(),
-                        dpToPx(this@RidesActivity, 15f).toInt(),
-                        dpToPx(this@RidesActivity, 15f).toInt())
-            }
-
-            addView(hourRide)
-            addView(driverRide)
-        }
-
-        onOpenRideInformatins(newLinearLayout, ride)
-        return newLinearLayout
+    private fun initRecyclerView(ridesList: MutableList<RideModel>) {
+        resultsRC.layoutManager = LinearLayoutManager(this)
+        resultsRC.setHasFixedSize(true)
+        resultsRC.adapter = AdapterRide(this, ridesList)
     }
 
     private fun personalizeBtn(txtView: TextView) {
@@ -171,104 +135,5 @@ class RidesActivity : AppCompatActivity() {
             }
         }
     }
-
-        private fun onOpenRideInformatins(rideLayout: LinearLayout, ride: RideModel) {
-            rideLayout.setOnClickListener {
-                val animator = ValueAnimator.ofInt(
-                    dpToPx(this,80f).toInt(),
-                    dpToPx(this,240f).toInt())
-                animator.duration = 1000
-
-                animator.addUpdateListener { animation ->
-                    val height = animation.animatedValue as Int
-                    rideLayout.layoutParams.height = height
-                    rideLayout.requestLayout()
-                }
-                animator.start()
-                removeLinearLayoutChildren(rideLayout)
-                putRideInformations(rideLayout, ride)
-            }
-        }
-
-    private fun putRideInformations(rideLayout: LinearLayout, ride: RideModel) {
-        rideLayout.orientation = LinearLayout.VERTICAL
-        var closeBtn = setCloseBtn()
-        var dateAndPrice =  setDateAndPrice(ride)
-        /*var driverAndSeats = setDriverAndSeats()
-        var confirmBtn = setConfirmBtn()*/
-        rideLayout.addView(closeBtn)
-        rideLayout.addView(dateAndPrice)
-    }
-
-    private fun setCloseBtn(): LinearLayout {
-        var imageView = ImageView(this)
-        var linearLayout = standardLinearLayout(this@RidesActivity)
-
-        imageView.apply {
-            setImageDrawable(ContextCompat.getDrawable(this@RidesActivity, R.drawable.close_x))
-            background = resources.getDrawable(R.drawable.circle_border)
-            scaleType = ImageView.ScaleType.CENTER_INSIDE
-            foregroundGravity = Gravity.CENTER
-            layoutParams = LinearLayout.LayoutParams(
-                dpToPx(this@RidesActivity, 16f).toInt(),
-                dpToPx(this@RidesActivity, 16f).toInt()
-            ).apply {
-                setMargins(dpToPx(this@RidesActivity, 15f).toInt(),
-                            dpToPx(this@RidesActivity, 15f).toInt(),
-                            dpToPx(this@RidesActivity, 15f).toInt(),
-                            dpToPx(this@RidesActivity, 15f).toInt()
-                )
-            }
-        }
-        linearLayout.addView(imageView)
-
-        return linearLayout
-    }
-
-    private fun setDateAndPrice(ride: RideModel): LinearLayout {
-        var linearLayout = standardLinearLayout(this@RidesActivity)
-        var dateHour = TextView(this)
-        var price = TextView(this)
-
-        dateHour.apply {
-            text = ride.dateHour.toString()
-            layoutParams = LinearLayout.LayoutParams(
-                dpToPx(this@RidesActivity, 16f).toInt(),
-                dpToPx(this@RidesActivity, 16f).toInt()
-            ).apply {
-                setMargins(dpToPx(this@RidesActivity, 15f).toInt(),
-                    dpToPx(this@RidesActivity, 15f).toInt(),
-                    dpToPx(this@RidesActivity, 15f).toInt(),
-                    dpToPx(this@RidesActivity, 15f).toInt()
-                )
-            }
-        }
-
-        price.apply {
-            text = ride.price.toString()
-            layoutParams = LinearLayout.LayoutParams(
-                dpToPx(this@RidesActivity, 16f).toInt(),
-                dpToPx(this@RidesActivity, 16f).toInt()
-            ).apply {
-                setMargins(dpToPx(this@RidesActivity, 15f).toInt(),
-                    dpToPx(this@RidesActivity, 15f).toInt(),
-                    dpToPx(this@RidesActivity, 15f).toInt(),
-                    dpToPx(this@RidesActivity, 15f).toInt()
-                )
-            }
-        }
-        linearLayout.addView(dateHour)
-        linearLayout.addView(price)
-
-        return linearLayout
-    }
-    private fun setDriverAndSeats() {
-        TODO("Not yet implemented")
-    }
-
-    private fun setConfirmBtn() {
-
-    }
-
 }
 

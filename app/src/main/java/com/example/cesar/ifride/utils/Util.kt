@@ -3,7 +3,8 @@ package com.example.cesar.ifride.utils
 import android.content.Context
 import android.view.Gravity
 import android.widget.LinearLayout
-import com.google.firebase.Timestamp
+import java.text.SimpleDateFormat
+import java.util.*
 
 class Util {
 
@@ -25,14 +26,21 @@ class Util {
                 gravity = Gravity.CENTER
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
+                    dpToPx(context, 80f).toInt(),
+                    1f
                 )
             }
             return linearLayout
         }
 
-        fun dateTimeFromTimestamp(timestamp: Timestamp) {
-            val tdate = timestamp.toDate()
+        fun formatDate(date: Date): String {
+            val dayFormat = SimpleDateFormat("EEEE dd/MM", Locale.getDefault())
+            val timeFormat = SimpleDateFormat("'às' HH:mm", Locale.getDefault())
+
+            val dayString = dayFormat.format(date)
+            val timeString = timeFormat.format(date)
+
+            return "$dayString\n$timeString"
         }
 
     }
