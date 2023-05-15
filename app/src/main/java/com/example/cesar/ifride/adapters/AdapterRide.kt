@@ -10,10 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.widget.TextViewCompat.setTextAppearance
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cesar.ifride.R
 import com.example.cesar.ifride.models.RideModel
 import com.example.cesar.ifride.utils.Util
+import org.w3c.dom.Text
 
 
 class AdapterRide(
@@ -43,35 +45,46 @@ class AdapterRide(
     override fun getItemCount() = ridesList.size
 
     private fun putRide(linearLayout: LinearLayout,ride: RideModel) {
-        val hourRide = TextView(context)
-        val driverRide = TextView(context)
+        Util.removeLinearLayoutChildren(linearLayout)
 
-        hourRide.apply {
+        val dateHourLayout = Util.standardLinearLayout(context)
+        val priceLayout = Util.standardLinearLayout(context)
+
+        val dateHourRide = TextView(context)
+        val dateHourRideLabel = TextView(context)
+        val priceRide = TextView(context)
+        val priceRideLabel = TextView(context)
+
+
+        dateHourRideLabel.apply {
+            text = context.getString(R.string.date_hour_label)
+            setTextAppearance(R.style.ride_label_text)
+        }
+        dateHourRide.apply {
             text = Util.formatDate(ride.dateHour)
-            textSize = 20f
-            textAlignment = View.TEXT_ALIGNMENT_CENTER
+            setTextAppearance(R.style.ride_value_text)
             gravity = Gravity.CENTER
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                1f
-            )
         }
+        dateHourLayout.addView(dateHourRideLabel)
+        dateHourLayout.addView(dateHourRide)
 
-        driverRide.apply {
-            text = "Preço: \n${ride.price.toString()}"
-            textSize = 25f
-            textAlignment = View.TEXT_ALIGNMENT_CENTER
+        priceRideLabel.apply {
+            text = context.getString(R.string.price_label)
+            setTextAppearance(R.style.ride_label_text)
+        }
+        priceRide.apply {
+            text = ride.price
+            setTextAppearance(R.style.ride_value_text)
             gravity = Gravity.CENTER
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                1f
-            )
         }
+        priceLayout.addView(priceRideLabel)
+        priceLayout.addView(priceRide)
 
-        linearLayout.addView(hourRide)
-        linearLayout.addView(driverRide)
+        dateHourLayout.orientation = LinearLayout.VERTICAL
+        priceLayout.orientation = LinearLayout.VERTICAL
+
+        linearLayout.addView(dateHourLayout)
+        linearLayout.addView(priceLayout)
 
         onOpenRideInformatins(linearLayout, ride)
     }
@@ -277,7 +290,7 @@ class AdapterRide(
         return view
     }
 
-    private fun onCloseRideInformations(imageView: ImageView,rideLayout: LinearLayout, ride: RideModel) {
+    private fun onCloseRideInformations(imageView: ImageView,rideLayout: LinearLayout, ride: RideModel)     {
         imageView.setOnClickListener {
             if (isOpened) {
                 val animator = ValueAnimator.ofInt(

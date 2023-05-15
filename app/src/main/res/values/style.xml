@@ -6,8 +6,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/solid_gray</item>
-
-
+        <item name="android:textAlignment">center</item>
     </style>
 
     <style name="ride_value_text">
