@@ -11,6 +11,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import org.w3c.dom.Document
 
 class RegisterDriverActivity : AppCompatActivity() {
 
@@ -51,16 +52,51 @@ class RegisterDriverActivity : AppCompatActivity() {
 
    }
 
-   private fun getuserReference(): DocumentReference? {
+   private fun getuserReference(): String? {
        val currentUser = auth.currentUser
-       val uid = currentUser?.uid
-       val userDocumentRef = uid?.let { db.collection("Users").document(it) }
+       val email = currentUser?.email
+       var userDocumentRef = ""
+
+       val query = db.collection("Users").whereEqualTo("email", email)
+
+       val querytest = query.get()
+
+       if (querytest.isSuccessful){
+           Log.d("TAG", querytest.getResult().toString())
+       }
+
+       query.get()
+           .addOnSuccessListener { querySnapshot ->
+               val document = querySnapshot.documents[0]
+
+               userDocumentRef = document.getString("registration").toString()
+               Log.d("TAG", userDocumentRef)
+
+           }
+           .addOnFailureListener { e ->
+               Log.d("TAG", "DEu cCARAIO MEMO", e)
+           }
 
        return userDocumentRef
    }
 
-   private fun updateIsDriver(user: DocumentReference?) {
+
+   private fun updateIsDriver(userRegistration: String?) {
+       val query = db.collection("Users").whereEqualTo("registration", userRegistration)
+       var user = ""
+
+        query.get()
+           .addOnSuccessListener {  documents ->
+               user = documents.documents[0].id
+           }
+
        if (user != null) {
+           db.collection("Users")
+               .document(user)
+               .update("isDriver", true)
+       }
+
+       /* (user != null) {
            user.update("isDriver", true)
                .addOnSuccessListener {
                    Log.d("TAG", "Element updated successfully")
@@ -68,6 +104,6 @@ class RegisterDriverActivity : AppCompatActivity() {
                .addOnFailureListener { e ->
                    Log.d("TAG", "Element update failed", e)
                }
-       }
+       }*/
    }
 }
