@@ -9,6 +9,8 @@ import com.example.cesar.ifride.databinding.ActivityRegisterBinding
 import com.example.cesar.ifride.entities.UserInfo
 import com.example.cesar.ifride.utils.RestApiService
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -18,6 +20,7 @@ import com.example.cesar.ifride.utils.Validation as Validation
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +28,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
         FirebaseApp.initializeApp(this)
         val db = Firebase.firestore
+        auth = Firebase.auth
 
         binding.btnSubmitRegister.setOnClickListener {
             Log.d(TAG, "sjkdhfjksadfjsahfjksahkjfjkshfjksahfjksajkf ABROBRA")
@@ -39,34 +43,44 @@ class RegisterActivity : AppCompatActivity() {
 
     fun register(db: FirebaseFirestore) {
         val registrationNumber = binding.etRegistration.text.toString().trim()
+        val email = binding.etEmail.text.toString().trim()
+        val password = binding.etPassword.text.toString().trim()
+
         val newUser = hashMapOf(
             "name" to binding.etName.text.toString().trim(),
-            "email" to binding.etEmail.text.toString().trim(),
+            "email" to email,
             "phone" to binding.etPhone.text.toString().trim(),
-            "password" to binding.etPassword.text.toString().trim(),
             "isDriver" to false
         )
 
         val userInfo = UserInfo(
             userName = binding.etName.text.toString().trim(),
-            userEmail = binding.etEmail.text.toString().trim(),
+            userEmail = email,
             userPhone = binding.etPhone.text.toString().trim()
         )
 
         val apiService = RestApiService()
 
         if (validatingInputs()) {
-            db.collection("Users")
-                .document(registrationNumber)
-                .set(newUser)
-                .addOnSuccessListener {
-                    Log.d(TAG, "The document was add successfully added")
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnSuccessListener { authResult ->
+                    val user = authResult.user
+
+                    db.collection("Users")
+                        .document(registrationNumber)
+                        .set(newUser)
+                        .addOnSuccessListener {
+                            Log.d(TAG, "O documento foi adicionado com sucesso")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(TAG, "Erro ao adicionar documento", e)
+                        }
                 }
                 .addOnFailureListener { e ->
-                    Log.w(TAG, "Error adding document", e)
+                    Log.w(TAG, "Erro ao criar registro de autenticação", e)
                 }
         } else {
-            Log.d(TAG, "deu errado!!")
+            Log.d(TAG, "Dados inválidos!")
         }
 
         apiService.addUser(userInfo) {
