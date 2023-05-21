@@ -1,6 +1,6 @@
 package com.example.cesar.ifride.models
 
-import com.google.firebase.firestore.DocumentReference
+import java.util.concurrent.CompletableFuture
 
 open class DriverModel(
     val userReference: String?,

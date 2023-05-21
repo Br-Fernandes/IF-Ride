@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import com.example.cesar.ifride.databinding.ActivityRegisterBinding
 import com.example.cesar.ifride.entities.UserInfo
+import com.example.cesar.ifride.models.UserModel
 import com.example.cesar.ifride.utils.RestApiService
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -46,11 +47,12 @@ class RegisterActivity : AppCompatActivity() {
         val email = binding.etEmail.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()
 
-        val newUser = hashMapOf(
-            "name" to binding.etName.text.toString().trim(),
-            "email" to email,
-            "phone" to binding.etPhone.text.toString().trim(),
-            "isDriver" to false
+        val newUser = UserModel(
+            registration = registrationNumber,
+            name  = binding.etName.text.toString().trim(),
+            email = email,
+            phone= binding.etPhone.text.toString().trim(),
+            isDriver = false
         )
 
         val userInfo = UserInfo(

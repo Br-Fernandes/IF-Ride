@@ -5,4 +5,5 @@
     <string name="car_model_input">Modelo do Carro</string>
     <string name="car_color_input">Cor do Carro</string>
     <string name="plate_input">Placa do Carro</string>
+
 </resources>

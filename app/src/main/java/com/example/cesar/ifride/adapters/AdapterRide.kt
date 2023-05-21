@@ -2,6 +2,7 @@ package com.example.cesar.ifride.adapters
 
 import android.animation.ValueAnimator
 import android.content.Context
+import android.util.Log
 import android.view.ContextThemeWrapper
 
 import android.view.Gravity
@@ -10,12 +11,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
-import androidx.core.widget.TextViewCompat.setTextAppearance
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cesar.ifride.R
 import com.example.cesar.ifride.models.RideModel
 import com.example.cesar.ifride.utils.Util
-import org.w3c.dom.Text
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 
 class AdapterRide(
@@ -26,6 +30,7 @@ class AdapterRide(
 ) : RecyclerView.Adapter<AdapterRide.MyViewHolder>() {
 
     var isOpened = false
+    var driverName = ""
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val rideLayout: LinearLayout = itemView.findViewById(R.id.ll_ride)
@@ -39,7 +44,12 @@ class AdapterRide(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val ride = ridesList[position]
 
+        GlobalScope.launch {
+            driverName = getDriverName(ride.driverRegistration)
+        }
+
         putRide(holder.rideLayout, ride)
+
     }
 
     override fun getItemCount() = ridesList.size
@@ -220,7 +230,7 @@ class AdapterRide(
             setTextAppearance(R.style.ride_label_text)
         }
         driver.apply {
-            text = ride.driverName
+            text = driverName
             setTextAppearance(R.style.ride_value_text)
             gravity = Gravity.CENTER
         }
@@ -312,4 +322,12 @@ class AdapterRide(
             }
         }
     }
+
+    private suspend fun getDriverName(userReference: String?): String {
+        val db = Firebase.firestore
+        val documentSnapshot = db.collection("Users").document(userReference!!).get().await()
+        Log.d("TAG", documentSnapshot.getString("name").toString())
+        return documentSnapshot.getString("name") ?: ""
+    }
+
 }

@@ -33,14 +33,17 @@ class Util {
             return linearLayout
         }
 
-        fun formatDate(date: Date): String {
-            val dayFormat = SimpleDateFormat("EEEE dd/MM", Locale.getDefault())
-            val timeFormat = SimpleDateFormat("'às' HH:mm", Locale.getDefault())
+        fun formatDate(dateString: String): String {
+            val formateInput = SimpleDateFormat("dd-MM-yyyy-HH-mm", Locale.getDefault())
+            val formateOutDate = SimpleDateFormat("dd 'de' MMMM 'de' yyyy", Locale.getDefault())
+            val formateSOutHour = SimpleDateFormat("HH:mm", Locale.getDefault())
 
-            val dayString = dayFormat.format(date)
-            val timeString = timeFormat.format(date)
+            val data = formateInput.parse(dateString)
 
-            return "$dayString\n$timeString"
+            val formatedDate = formateOutDate.format(data)
+            val formatedHour = formateSOutHour.format(data)
+
+            return "$formatedDate\n$formatedHour"
         }
 
     }

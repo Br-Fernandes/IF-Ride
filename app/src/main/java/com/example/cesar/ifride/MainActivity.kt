@@ -22,12 +22,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
 
+       /* val intent = Intent(this, RegisterRideActivity::class.java)
+        startActivity(intent)*/
+
+  //      auth.signOut()
+
         verifyAuthetication()
 
-        val intent = Intent(this, RegisterDriverActivity::class.java)
-        startActivity(intent)
 
-        //auth.signOut()
 
 
 
