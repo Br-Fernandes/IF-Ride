@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
        /* val intent = Intent(this, RegisterRideActivity::class.java)
         startActivity(intent)*/
 
-  //      auth.signOut()
+        //auth.signOut()
 
         verifyAuthetication()
 

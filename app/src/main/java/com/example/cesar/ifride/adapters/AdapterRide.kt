@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cesar.ifride.R
 import com.example.cesar.ifride.models.RideModel
 import com.example.cesar.ifride.utils.Util
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.GlobalScope
@@ -126,7 +127,7 @@ class AdapterRide(
         var closeBtn = setCloseBtn(rideLayout,ride)
         var dateAndPrice =  setDateAndPrice(ride)
         var driverAndSeats = setDriverAndSeats(ride)
-        var confirmBtn = setConfirmBtn()
+        var confirmBtn = setConfirmBtn(ride)
 
         rideLayout.addView(closeBtn)
         rideLayout.addView(viewTraceHorizontal())
@@ -260,7 +261,7 @@ class AdapterRide(
         return linearLayout
     }
 
-    private fun setConfirmBtn(): LinearLayout {
+    private fun setConfirmBtn(ride: RideModel): LinearLayout {
         var linearLayout = Util.standardLinearLayout(context)
         var confirmBtn = Button(ContextThemeWrapper(context, R.style.ride_confirm_btn))
 
@@ -270,10 +271,50 @@ class AdapterRide(
             setBackgroundResource(R.drawable.border_confirm_ride)
         }
 
+        confirmBtnAction(confirmBtn, ride)
+
         linearLayout.gravity = Gravity.CENTER
         linearLayout.addView(confirmBtn)
 
         return linearLayout
+    }
+
+    private fun confirmBtnAction(confirmBtn: Button, ride: RideModel) {
+        confirmBtn.setOnClickListener {
+            val db = Firebase.firestore
+            val auth = FirebaseAuth.getInstance()
+            val currentUserEmail = auth.currentUser!!.email
+
+            val query = db.collection("Users").whereEqualTo("email", currentUserEmail)
+            query.get().addOnSuccessListener {querySnapshot ->
+                val document = querySnapshot.documents[0]
+                val passengerRef = document.getString("registration")
+
+                val updatedAvailableCarSeats = ride.availableCarSeats - 1
+
+                val queryRide = db.collection("Rides").whereEqualTo("driverRegistration", ride.driverRegistration)
+                queryRide.get().addOnSuccessListener { documentSnapshot ->
+                    val passengers = documentSnapshot.documents[0].get("passengers") as? ArrayList<String> ?: arrayListOf()
+
+                    passengers.add(passengerRef!!)
+
+                    val updates = hashMapOf<String, Any>(
+                        "passengers" to passengers,
+                        "availableCarSeats" to updatedAvailableCarSeats
+                    )
+
+                    val updateRide = documentSnapshot.documents[0].id
+                    db.collection("Rides").document(updateRide).update(updates)
+                        .addOnSuccessListener {
+                            Log.d("TAG", "Atualizou a Carona com sucesso")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.d("TAG", "Deu errado ao atualizar a carona")
+                        }
+
+                }
+            }
+        }
     }
 
     private fun viewTraceHorizontal(): View? {

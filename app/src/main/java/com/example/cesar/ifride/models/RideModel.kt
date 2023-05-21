@@ -9,7 +9,7 @@ open class RideModel(
     val city: String = "",
     val price: String = "",
     val availableCarSeats: Int = 0,
-    val passengers: MutableList<DocumentReference> = mutableListOf()
+    val passengers: MutableList<String> = mutableListOf()
 ) {
     constructor() : this("", "", "", "", "", 0)
 }
