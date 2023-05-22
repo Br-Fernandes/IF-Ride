@@ -1,6 +1,5 @@
 package com.example.cesar.ifride
 
-import android.animation.ValueAnimator
 import android.content.ContentValues.TAG
 
 import androidx.appcompat.app.AppCompatActivity
@@ -8,24 +7,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
 import android.util.Log
-import android.view.Gravity
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
 
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
+
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cesar.ifride.adapters.AdapterRide
 
+import com.example.cesar.ifride.adapters.AdapterRide
 import com.example.cesar.ifride.databinding.ActivityRidesBinding
 import com.example.cesar.ifride.models.RideModel
-
-import com.example.cesar.ifride.utils.Util.Companion.dpToPx
-import com.example.cesar.ifride.utils.Util.Companion.removeLinearLayoutChildren
-import com.example.cesar.ifride.utils.Util.Companion.standardLinearLayout
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore

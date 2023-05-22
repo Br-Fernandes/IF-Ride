@@ -3,7 +3,7 @@ package com.example.cesar.ifride
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.cesar.ifride.databinding.ActivityMainBinding
@@ -22,8 +22,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
 
-       /* val intent = Intent(this, RegisterRideActivity::class.java)
-        startActivity(intent)*/
+        val intent = Intent(this, RegisterRideActivity::class.java)
+        startActivity(intent)
 
         //auth.signOut()
 
@@ -65,5 +65,4 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
     }
-
 }
