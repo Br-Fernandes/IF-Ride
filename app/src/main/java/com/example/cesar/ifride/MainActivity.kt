@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.cesar.ifride.databinding.ActivityMainBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -22,17 +23,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
 
-        val intent = Intent(this, RegisterRideActivity::class.java)
-        startActivity(intent)
-
         //auth.signOut()
 
-        verifyAuthetication()
+        //verifyAuthetication()
 
-
-
-
-
+        configureBottomNavigation()
 
         chooseCities()
     }
@@ -64,5 +59,39 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+
+    private fun configureBottomNavigation() {
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_nav)
+        bottomNavigationView.selectedItemId = R.id.cities
+
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.cities -> {
+                    true
+                }
+                R.id.rides -> {
+                    val intent = Intent(this, RegisterRideActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(0,0)
+                    true
+                }
+                R.id.mine_rides -> {
+                    val intent = Intent(this, MineRidesActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                R.id.account -> {
+                    val intent = Intent(this, AccountActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                else -> Unit
+            }
+            false
+        }
+
     }
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/cities"
+        android:title="Cidades"
+        android:icon="@drawable/ic_city"/>
+
+    <item
+        android:id="@+id/rides"
+        android:title="Criar Caronas"
+        android:icon="@drawable/ic_rides"/>
+
+    <item
+        android:id="@+id/mine_rides"
+        android:title="Minhas Caronas"
+        android:icon="@drawable/ic_mine_rides"/>
+
+    <item
+        android:id="@+id/account"
+        android:title="Conta"
+        android:icon="@drawable/ic_account"/>
+
+</menu>

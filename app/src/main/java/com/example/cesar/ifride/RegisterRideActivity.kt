@@ -2,6 +2,7 @@ package com.example.cesar.ifride
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,7 @@ import android.widget.*
 import com.example.cesar.ifride.databinding.ActivityRegisterRideBinding
 import com.example.cesar.ifride.models.RideModel
 import com.example.cesar.ifride.utils.MoneyTextWatcher
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -27,6 +29,8 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
         setContentView(binding.root)
         db = Firebase.firestore
         auth = FirebaseAuth.getInstance()
+
+        configureBottomNavigation()
 
         configureInputs()
 
@@ -154,5 +158,39 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
     override fun onTimeSet(p0: TimePicker?, hourOfDay: Int, minute: Int) {
         savedHour = hourOfDay
         savedMinute = minute
+    }
+
+    private fun configureBottomNavigation() {
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_nav)
+        bottomNavigationView.selectedItemId = R.id.rides
+
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.cities -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(0,0)
+                    true
+                }
+                R.id.rides -> {
+                    true
+                }
+                R.id.mine_rides -> {
+                    val intent = Intent(this, MineRidesActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                R.id.account -> {
+                    val intent = Intent(this, AccountActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                else -> Unit
+            }
+            false
+        }
+
     }
 }

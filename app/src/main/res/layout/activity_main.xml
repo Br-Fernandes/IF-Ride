@@ -122,5 +122,7 @@
 
     </RelativeLayout>
 
+    <include
+        layout="@layout/layout_bottom_navbar"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
