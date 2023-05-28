@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="txt_choose_mine_rides">Ver suas Caronas como:</string>
     <string name="txt_passenger">Passageiro</string>
     <string name="txt_driver">Motorista</string>
+    <string name="cancel_ride_btn">Desistir da Carona</string>
 </resources>

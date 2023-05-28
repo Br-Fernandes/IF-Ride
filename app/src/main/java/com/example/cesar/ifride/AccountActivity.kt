@@ -3,14 +3,78 @@ package com.example.cesar.ifride
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
+import com.example.cesar.ifride.databinding.ActivityAccountBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class AccountActivity : AppCompatActivity() {
+
+    private lateinit var db: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
+    private lateinit var binding: ActivityAccountBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_account)
+        binding = ActivityAccountBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        db = Firebase.firestore
+        auth = FirebaseAuth.getInstance()
+
+        setUserNameOnTitle()
+
+        logout()
+        deleteAccount()
 
         configureBottomNavigation()
+    }
+
+    private fun setUserNameOnTitle() {
+        val accountTitle = binding.tvTitleRegister
+        val currentUserEmail = auth.currentUser!!.email
+
+        val query = db.collection("Users").whereEqualTo("email", currentUserEmail)
+        query.get().addOnSuccessListener { querySnapshot ->
+            val currentUserName = querySnapshot.documents[0].get("name").toString()
+            val (firstName, secondName) = currentUserName.split(" ")
+            accountTitle.text = "$firstName $secondName"
+        }
+    }
+
+    private fun logout() {
+        binding.logoutOption.setOnClickListener {
+            auth.signOut()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun deleteAccount() {
+        binding.deleteAccountOption.setOnClickListener {
+            val alertDialogBuilder = AlertDialog.Builder(this)
+            alertDialogBuilder.setMessage(R.string.alert_dialog_message)
+            alertDialogBuilder.setPositiveButton("Sim") { dialog, which ->
+                val currentUser = auth.currentUser
+
+                val query = db.collection("Users").whereEqualTo("email", currentUser!!.email)
+                query.get().addOnSuccessListener { querySnapshot ->
+                    querySnapshot.documents[0].reference.delete().addOnSuccessListener {
+                        currentUser.delete()
+                        val intent = Intent(this, RegisterActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
+            }
+            alertDialogBuilder.setNegativeButton("Não") {dialog, which ->
+                dialog.dismiss()
+            }
+
+            val alertDialog = alertDialogBuilder.create()
+            alertDialog.show()
+        }
     }
 
     private fun configureBottomNavigation() {

@@ -7,9 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.cesar.ifride.databinding.ActivityRegisterRideBinding
 import com.example.cesar.ifride.models.RideModel
 import com.example.cesar.ifride.utils.MoneyTextWatcher
+import com.example.cesar.ifride.utils.Util
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -30,6 +34,8 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
         db = Firebase.firestore
         auth = FirebaseAuth.getInstance()
 
+        verifyIsDriver()
+
         configureBottomNavigation()
 
         configureInputs()
@@ -38,6 +44,7 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
             createNewRide()
         }
     }
+
 
     private fun createNewRide() {
         val city = binding.spinnerCities.selectedItem.toString()
@@ -158,6 +165,18 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
     override fun onTimeSet(p0: TimePicker?, hourOfDay: Int, minute: Int) {
         savedHour = hourOfDay
         savedMinute = minute
+    }
+
+    fun verifyIsDriver() {
+        val query = Util.db.collection("Users").whereEqualTo("email", Util.auth.currentUser!!.email)
+        query.get().addOnSuccessListener { querySnapshot ->
+            val value = querySnapshot.documents[0].get("isDriver").toString().toBoolean()
+
+            if (!value) {
+                val intent = Intent(this, RegisterDriverActivity::class.java)
+                startActivity(intent)
+            }
+        }
     }
 
     private fun configureBottomNavigation() {

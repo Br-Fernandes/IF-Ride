@@ -3,6 +3,7 @@ package com.example.cesar.ifride
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -23,13 +24,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
 
-        //auth.signOut()
-
-        //verifyAuthetication()
+        verifyAuthetication()
 
         configureBottomNavigation()
 
         chooseCities()
+        Log.d("TAG", auth.currentUser!!.email.toString())
     }
 
     private fun chooseCities() {

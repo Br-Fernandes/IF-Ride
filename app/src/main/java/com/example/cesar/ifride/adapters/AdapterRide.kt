@@ -25,13 +25,15 @@ import kotlinx.coroutines.tasks.await
 
 class AdapterRide(
 
-    private val context: Context,
+    private val context: Context?,
     private val ridesList: List<RideModel>
 
 ) : RecyclerView.Adapter<AdapterRide.MyViewHolder>() {
 
+    constructor() : this(context = null, ridesList = emptyList())
+
     var isOpened = false
-    var driverName = ""
+    var db = Firebase.firestore
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val rideLayout: LinearLayout = itemView.findViewById(R.id.ll_ride)
@@ -45,20 +47,15 @@ class AdapterRide(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val ride = ridesList[position]
 
-        GlobalScope.launch {
-            driverName = getDriverName(ride.driverRegistration)
-        }
-
-        putRide(holder.rideLayout, ride)
-
+        putRide(this.context,holder.rideLayout, ride)
     }
 
     override fun getItemCount() = ridesList.size
 
-    private fun putRide(linearLayout: LinearLayout,ride: RideModel) {
+    public fun putRide(context: Context?,linearLayout: LinearLayout,ride: RideModel) {
         Util.removeLinearLayoutChildren(linearLayout)
 
-        val dateHourLayout = Util.standardLinearLayout(context)
+        val dateHourLayout = Util.standardLinearLayout(context!!)
         val priceLayout = Util.standardLinearLayout(context)
 
         val dateHourRide = TextView(context)
@@ -97,14 +94,14 @@ class AdapterRide(
         linearLayout.addView(dateHourLayout)
         linearLayout.addView(priceLayout)
 
-        onOpenRideInformatins(linearLayout, ride)
+        onOpenRideInformatins(context,linearLayout, ride)
     }
 
-    private fun onOpenRideInformatins(rideLayout: LinearLayout, ride: RideModel) {
+    public fun onOpenRideInformatins( context: Context,rideLayout: LinearLayout, ride: RideModel) {
         rideLayout.setOnClickListener {
             if (!isOpened){
                 val animator = ValueAnimator.ofInt(
-                    Util.dpToPx(context, 80f).toInt(),
+                    Util.dpToPx(context!!, 80f).toInt(),
                     Util.dpToPx(context, 450f).toInt()
                 )
                 animator.duration = 1000
@@ -116,30 +113,30 @@ class AdapterRide(
                 }
                 animator.start()
                 Util.removeLinearLayoutChildren(rideLayout)
-                putRideInformations(rideLayout, ride)
+                putRideInformations(context,rideLayout, ride)
                 isOpened = true
             }
         }
     }
 
-    private fun putRideInformations(rideLayout: LinearLayout, ride: RideModel) {
+    public fun putRideInformations(context: Context, rideLayout: LinearLayout, ride: RideModel) {
         rideLayout.orientation = LinearLayout.VERTICAL
-        var closeBtn = setCloseBtn(rideLayout,ride)
-        var dateAndPrice =  setDateAndPrice(ride)
-        var driverAndSeats = setDriverAndSeats(ride)
-        var confirmBtn = setConfirmBtn(ride)
+        var closeBtn = setCloseBtn(context,rideLayout,ride)
+        var dateAndPrice =  setDateAndPrice(context,ride)
+        var driverAndSeats = setDriverAndSeats(context,ride)
+        var confirmBtn = setConfirmBtn(context,ride)
 
         rideLayout.addView(closeBtn)
-        rideLayout.addView(viewTraceHorizontal())
+        //rideLayout.addView(viewTraceHorizontal())
         rideLayout.addView(dateAndPrice)
-        rideLayout.addView(viewTraceHorizontal())
+       // rideLayout.addView(viewTraceHorizontal())
         rideLayout.addView(driverAndSeats)
-        rideLayout.addView(viewTraceHorizontal())
+        //rideLayout.addView(viewTraceHorizontal())
         rideLayout.addView(confirmBtn)
     }
 
-    private fun setCloseBtn(rideLayout: LinearLayout, ride: RideModel): LinearLayout {
-        var linearLayout = Util.standardLinearLayout(context)
+    public fun setCloseBtn(context: Context, rideLayout: LinearLayout, ride: RideModel): LinearLayout {
+        var linearLayout = Util.standardLinearLayout(this.context)
         linearLayout.apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -147,7 +144,7 @@ class AdapterRide(
             )
         }
 
-        var imageView = ImageView(context)
+        var imageView = ImageView(this.context)
         imageView.apply {
             setImageDrawable(ContextCompat.getDrawable(context, R.drawable.close_x))
             background = resources.getDrawable(R.drawable.circle_border)
@@ -171,7 +168,7 @@ class AdapterRide(
         return linearLayout
     }
 
-    private fun setDateAndPrice(ride: RideModel): LinearLayout {
+    public fun setDateAndPrice(context: Context?, ride: RideModel): LinearLayout {
         var linearLayout = Util.standardLinearLayout(context)
         var llDateHourLayout = Util.standardLinearLayout(context)
         var llPriceLayout = Util.standardLinearLayout(context)
@@ -182,7 +179,7 @@ class AdapterRide(
         var priceLabel = TextView(context)
 
         dateHourLabel.apply {
-            text = context.getString(R.string.date_hour_label)
+            text = context!!.getString(R.string.date_hour_label)
             setTextAppearance(R.style.ride_label_text)
         }
         dateHour.apply {
@@ -192,7 +189,7 @@ class AdapterRide(
         }
 
         priceLabel.apply {
-            text = context.getString(R.string.price_label)
+            text = context!!.getString(R.string.price_label)
             setTextAppearance(R.style.ride_label_text)
         }
         price.apply {
@@ -210,13 +207,13 @@ class AdapterRide(
         llPriceLayout.addView(price)
 
         linearLayout.addView(llDateHourLayout)
-        linearLayout.addView(viewTraceVertical())
+       // linearLayout.addView(viewTraceVertical())
         linearLayout.addView(llPriceLayout)
 
         return linearLayout
     }
 
-    private fun setDriverAndSeats(ride: RideModel): LinearLayout {
+    public fun setDriverAndSeats(context: Context?, ride: RideModel): LinearLayout {
         var linearLayout = Util.standardLinearLayout(context)
         var llDriverLayout = Util.standardLinearLayout(context)
         var llCarSeatsLayout = Util.standardLinearLayout(context)
@@ -227,17 +224,23 @@ class AdapterRide(
         var carSeatsLabel = TextView(context)
 
         driverLabel.apply {
-            text = context.getString(R.string.driver_label)
+            text = context!!.getString(R.string.driver_label)
             setTextAppearance(R.style.ride_label_text)
         }
         driver.apply {
-            text = driverName
+            db.collection("Users").whereEqualTo("registration", ride.driverRegistration)
+                .get().addOnSuccessListener { querySnapshot ->
+                    if (querySnapshot.documents.isNotEmpty()) {
+                        val driverName = querySnapshot.documents[0].get("name").toString()
+                        text = driverName
+                    }
+                }
             setTextAppearance(R.style.ride_value_text)
             gravity = Gravity.CENTER
         }
 
         carSeatsLabel.apply {
-            text = context.getString(R.string.car_seats_label)
+            text = context!!.getString(R.string.car_seats_label)
             setTextAppearance(R.style.ride_label_text)
         }
         carSeats.apply {
@@ -255,19 +258,18 @@ class AdapterRide(
         llCarSeatsLayout.addView(carSeats)
 
         linearLayout.addView(llDriverLayout)
-        linearLayout.addView(viewTraceVertical())
+        //linearLayout.addView(viewTraceVertical())
         linearLayout.addView(llCarSeatsLayout)
 
         return linearLayout
     }
 
-    private fun setConfirmBtn(ride: RideModel): LinearLayout {
+    private fun setConfirmBtn(context: Context, ride: RideModel): LinearLayout {
         var linearLayout = Util.standardLinearLayout(context)
         var confirmBtn = Button(ContextThemeWrapper(context, R.style.ride_confirm_btn))
 
         confirmBtn.apply {
             text = resources.getText(R.string.confirm_ride_btn)
-            //setTextAppearance(R.style.ride_confirm_btn)
             setBackgroundResource(R.drawable.border_confirm_ride)
         }
 
@@ -345,7 +347,7 @@ class AdapterRide(
         imageView.setOnClickListener {
             if (isOpened) {
                 val animator = ValueAnimator.ofInt(
-                    Util.dpToPx(context, 450f).toInt(),
+                    Util.dpToPx(context!!, 450f).toInt(),
                     Util.dpToPx(context, 80f).toInt()
                 )
                 animator.duration = 1000
@@ -357,18 +359,18 @@ class AdapterRide(
                 }
                 animator.start()
                 Util.removeLinearLayoutChildren(rideLayout)
-                putRide(rideLayout, ride)
+                putRide(this.context, rideLayout, ride)
                 rideLayout.orientation = LinearLayout.HORIZONTAL
                 isOpened = false
             }
         }
     }
 
-    private suspend fun getDriverName(userReference: String?): String {
+    /*private suspend fun getDriverName(userReference: String?): String {
         val db = Firebase.firestore
         val documentSnapshot = db.collection("Users").document(userReference!!).get().await()
         Log.d("TAG", documentSnapshot.getString("name").toString())
         return documentSnapshot.getString("name") ?: ""
-    }
+    }*/
 
 }

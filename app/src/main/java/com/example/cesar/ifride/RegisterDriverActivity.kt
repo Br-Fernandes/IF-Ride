@@ -1,5 +1,6 @@
 package com.example.cesar.ifride
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -50,14 +51,13 @@ class RegisterDriverActivity : AppCompatActivity() {
                     Log.d("TAG", userReference)
                     updateIsDriver(userReference)
                     Log.d("TAG", "Document added successfully")
+                    openRegisterRide()
                 }
                 .addOnFailureListener { e ->
                     Log.d("TAG", "Document addition failed", e)
                 }
         }
     }
-
-
 
     private fun updateIsDriver(userRegistration: String?) {
         val query = db.collection("Users").whereEqualTo("registration", userRegistration)
@@ -84,5 +84,10 @@ class RegisterDriverActivity : AppCompatActivity() {
                 }.addOnFailureListener { e ->
                     Log.d("TAG", "Error retrieving user reference", e)
                 }
+    }
+
+    private fun openRegisterRide() {
+        val intent = Intent(this, RegisterRideActivity::class.java)
+        startActivity(intent)
     }
 }
