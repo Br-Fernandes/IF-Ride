@@ -7,6 +7,7 @@ import android.view.*
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cesar.ifride.MineRidesActivity
 import com.example.cesar.ifride.R
 import com.example.cesar.ifride.models.RideModel
 import com.example.cesar.ifride.utils.Util
@@ -89,6 +90,7 @@ class AdapterRideAsPassenger(
                     )
 
                     db.collection("Rides").document(key).update(update)
+                    MineRidesActivity.getInstance()!!.seeRidesAsPassenger()
                 }
                 .addOnFailureListener { e ->
                     Log.d("TAG", "Falha ao encontrar documento pela key")

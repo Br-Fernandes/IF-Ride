@@ -24,6 +24,14 @@ class MineRidesActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMineRidesBinding
     private lateinit var resultsRC: RecyclerView
 
+    companion object {
+        private var instance: MineRidesActivity?  = null
+
+        fun getInstance(): MineRidesActivity? {
+            return instance
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMineRidesBinding.inflate(layoutInflater)
@@ -31,6 +39,7 @@ class MineRidesActivity : AppCompatActivity() {
         db = Firebase.firestore
         auth = FirebaseAuth.getInstance()
         resultsRC = binding.rcResults2
+        instance = this
 
         seeRidesAsPassenger()
 
@@ -53,7 +62,7 @@ class MineRidesActivity : AppCompatActivity() {
     }
 
 
-    private fun seeRidesAsPassenger() {
+    fun seeRidesAsPassenger() {
         resultsRC.removeAllViews()
 
         val currentUserEmail = auth.currentUser!!.email
@@ -93,7 +102,7 @@ class MineRidesActivity : AppCompatActivity() {
         personalizeBtn(binding.txtPassengerOption)
     }
 
-    private fun initRecyclerView(ridesList: Map<String, RideModel>) {
+    fun initRecyclerView(ridesList: Map<String, RideModel>) {
         resultsRC.layoutManager = LinearLayoutManager(this)
         resultsRC.setHasFixedSize(true)
         resultsRC.adapter = AdapterRideAsPassenger(this, ridesList)
