@@ -23,4 +23,22 @@ class Validation {
     fun passwordValidation(password: String, password2: String): Boolean {
         return password.isNotEmpty() && password2.isNotEmpty() && password == password2
     }
+
+    fun cnhValidation(cnh: String): Boolean {
+        return cnh.isNotEmpty() && cnh.all {it.isDigit()} && cnh.length == 9
+    }
+
+    fun carModelValidation(carModel: String): Boolean {
+        return carModel.isNotEmpty()
+    }
+
+    fun carColorValidation(carColor: String): Boolean {
+        return carColor.isNotEmpty() && carColor.all {it.isLetter()}
+    }
+
+    fun plateValidation(plate: String): Boolean {
+        val standard =  Regex("[A-Z]{3}[0-9]{4}")
+        return plate.isNotEmpty() && plate.matches(standard)
+    }
+
 }

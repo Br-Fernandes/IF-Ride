@@ -13,6 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.util.*
 
 class RegisterDriverActivity : AppCompatActivity() {
 
@@ -42,7 +43,7 @@ class RegisterDriverActivity : AppCompatActivity() {
                 cnh = binding.etCnh.text.toString().trim(),
                 carModel = binding.etCarModel.text.toString().trim(),
                 carColor = binding.etCarColor.text.toString().trim(),
-                plate = binding.etPlate.text.toString().trim()
+                plate = binding.etPlate.text.toString().uppercase().trim()
             )
 
             db.collection("Drivers")

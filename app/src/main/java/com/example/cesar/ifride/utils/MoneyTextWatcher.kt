@@ -19,6 +19,5 @@ class MoneyTextWatcher(private val editText: EditText): TextWatcher {
     }
 
     override fun afterTextChanged(p0: Editable?) {
-
     }
 }

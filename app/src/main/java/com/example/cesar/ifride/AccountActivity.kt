@@ -40,7 +40,7 @@ class AccountActivity : AppCompatActivity() {
         query.get().addOnSuccessListener { querySnapshot ->
             val currentUserName = querySnapshot.documents[0].get("name").toString()
             val (firstName, secondName) = currentUserName.split(" ")
-            accountTitle.text = "$firstName $secondName"
+            accountTitle.text = "Olá, $firstName"
         }
     }
 
