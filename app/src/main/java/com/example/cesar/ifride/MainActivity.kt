@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
         configureBottomNavigation()
 
         chooseCities()
-        Log.d("TAG", auth.currentUser!!.email.toString())
     }
 
     private fun chooseCities() {

@@ -1,10 +1,32 @@
 package com.example.cesar.ifride.utils
 
+import com.google.android.gms.common.api.Api
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
+import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.core.FirestoreClient
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import java.util.concurrent.Future
+
 class Validation {
 
+    val db = Firebase.firestore
+
     fun registrationValidation(registration: String): Boolean {
-        return registration.isNotEmpty() && registration.all {it.isDigit()} && registration.length == 16
+        val query = db.collection("Users").whereEqualTo("registration", registration)
+
+        val querySnapshotTask = query.get()
+        Tasks.await(querySnapshotTask) // Espera até que a tarefa seja concluída
+
+        val querySnapshot = querySnapshotTask.result
+
+        if (querySnapshot.size() == 0) {
+            return registration.isNotEmpty() && registration.all { it.isDigit() } && registration.length == 16
+        }
+        return false
     }
+
 
     fun nameValidation(name: String): Boolean {
         return name.isNotEmpty() && name.all { it.isLetter() || it.isWhitespace() }

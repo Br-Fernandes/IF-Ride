@@ -32,12 +32,11 @@ class RegisterActivity : AppCompatActivity() {
         auth = Firebase.auth
 
         binding.btnSubmitRegister.setOnClickListener {
-            Log.d(TAG, "sjkdhfjksadfjsahfjksahkjfjkshfjksahfjksajkf ABROBRA")
             register(db)
         }
 
         binding.txtLoginActivity.setOnClickListener {
-            openLoginActivity()
+            //openLoginActivity()
         }
     }
 
@@ -64,26 +63,42 @@ class RegisterActivity : AppCompatActivity() {
         val apiService = RestApiService()
 
         if (validatingInputs()) {
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnSuccessListener { authResult ->
-                    val user = authResult.user
+            val query = db.collection("Users")
+                .whereEqualTo("email", email)
+                .whereEqualTo("registration", registrationNumber)
 
-                    db.collection("Users")
-                        .document(registrationNumber)
-                        .set(newUser)
-                        .addOnSuccessListener {
-                            Log.d(TAG, "O documento foi adicionado com sucesso")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(TAG, "Erro ao adicionar documento", e)
-                        }
+            query.get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val querySnapshot = task.result
+                    if (querySnapshot.isEmpty) {
+                        auth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener { authTask ->
+                                if (authTask.isSuccessful) {
+                                    db.collection("Users")
+                                        .document(registrationNumber)
+                                        .set(newUser)
+                                        .addOnCompleteListener { dbTask ->
+                                            if (dbTask.isSuccessful) {
+                                                Log.d(TAG, "O documento foi adicionado com sucesso")
+                                            } else {
+                                                Log.w(TAG, "Erro ao adicionar documento", dbTask.exception)
+                                            }
+                                        }
+                                } else {
+                                    Log.w(TAG, "Erro ao criar registro de autenticação", authTask.exception)
+                                }
+                            }
+                    } else {
+                        Log.d(TAG, "Dados já cadastrados")
+                    }
+                } else {
+                    Log.w(TAG, "Erro ao executar a consulta", task.exception)
                 }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "Erro ao criar registro de autenticação", e)
-                }
+            }
         } else {
             Log.d(TAG, "Dados inválidos!")
         }
+
 
         apiService.addUser(userInfo) {
             if (it?.userEmail != null) {
@@ -108,5 +123,4 @@ class RegisterActivity : AppCompatActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }
-
 }
