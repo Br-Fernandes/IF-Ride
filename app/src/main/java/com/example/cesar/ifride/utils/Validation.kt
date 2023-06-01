@@ -14,17 +14,7 @@ class Validation {
     val db = Firebase.firestore
 
     fun registrationValidation(registration: String): Boolean {
-        val query = db.collection("Users").whereEqualTo("registration", registration)
-
-        val querySnapshotTask = query.get()
-        Tasks.await(querySnapshotTask) // Espera até que a tarefa seja concluída
-
-        val querySnapshot = querySnapshotTask.result
-
-        if (querySnapshot.size() == 0) {
-            return registration.isNotEmpty() && registration.all { it.isDigit() } && registration.length == 16
-        }
-        return false
+        return registration.isNotEmpty() && registration.all { it.isDigit() } && registration.length == 16
     }
 
 
