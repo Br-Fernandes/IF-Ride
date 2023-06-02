@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import com.example.cesar.ifride.databinding.ActivityRegisterDriverBinding
 import com.example.cesar.ifride.models.DriverModel
+import com.example.cesar.ifride.utils.Validation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -34,29 +35,43 @@ class RegisterDriverActivity : AppCompatActivity() {
     }
 
     private fun registerDriver() {
-        getUserQuerySnapshot().addOnSuccessListener { querySnapshot ->
-            val document = querySnapshot.documents[0]
-            val userReference = document.getString("registration").toString()
+        if (validationInputs()) {
+            val query = db.collection("Drivers")
+                .whereEqualTo("cnh", binding.etCnh.text.toString().trim())
+                .whereEqualTo("plate", binding.etPlate.text.toString().trim())
 
-            val newDriver = DriverModel(
-                userReference = userReference,
-                cnh = binding.etCnh.text.toString().trim(),
-                carModel = binding.etCarModel.text.toString().trim(),
-                carColor = binding.etCarColor.text.toString().trim(),
-                plate = binding.etPlate.text.toString().uppercase().trim()
-            )
+            query.get().addOnSuccessListener { querySnapshot ->
+                if (querySnapshot.size() == 0) {
+                    getUserQuerySnapshot().addOnSuccessListener { querySnapshot2 ->
+                        val document = querySnapshot2.documents[0]
+                        val userReference = document.getString("registration").toString()
 
-            db.collection("Drivers")
-                .add(newDriver)
-                .addOnSuccessListener {
-                    Log.d("TAG", userReference)
-                    updateIsDriver(userReference)
-                    Log.d("TAG", "Document added successfully")
-                    openRegisterRide()
+                        val newDriver = DriverModel(
+                            userReference = userReference,
+                            cnh = binding.etCnh.text.toString().trim(),
+                            carModel = binding.etCarModel.text.toString().trim(),
+                            carColor = binding.etCarColor.text.toString().trim(),
+                            plate = binding.etPlate.text.toString().uppercase().trim()
+                        )
+
+                        db.collection("Drivers")
+                            .add(newDriver)
+                            .addOnSuccessListener {
+                                Log.d("TAG", userReference)
+                                updateIsDriver(userReference)
+                                Log.d("TAG", "Document added successfully")
+                                openRegisterRide()
+                            }
+                            .addOnFailureListener { e ->
+                                Log.d("TAG", "Document addition failed", e)
+                            }
+                    }
+                } else {
+                    Log.d("TAG", "Dados já cadastrados")
                 }
-                .addOnFailureListener { e ->
-                    Log.d("TAG", "Document addition failed", e)
-                }
+            }
+        } else {
+            Log.d("TAG","Inputs inválidos" )
         }
     }
 
@@ -64,9 +79,9 @@ class RegisterDriverActivity : AppCompatActivity() {
         val query = db.collection("Users").whereEqualTo("registration", userRegistration)
 
         query.get().addOnSuccessListener { documents ->
-            val user = documents.documents[0].id
+            if (!documents.isEmpty) {
+                val user = documents.documents[0].id
 
-            if (user != null) {
                 db.collection("Users")
                     .document(user)
                     .update("isDriver", true)
@@ -85,6 +100,15 @@ class RegisterDriverActivity : AppCompatActivity() {
                 }.addOnFailureListener { e ->
                     Log.d("TAG", "Error retrieving user reference", e)
                 }
+    }
+
+    private fun validationInputs(): Boolean {
+        val vali = Validation()
+
+        return vali.cnhValidation(binding.etCnh.text.toString().trim()) &&
+               vali.carModelValidation(binding.etCarModel.text.toString().trim()) &&
+               vali.carColorValidation(binding.etCarColor.text.toString().trim()) &&
+               vali.plateValidation(binding.etPlate.text.toString().trim())
     }
 
     private fun openRegisterRide() {
