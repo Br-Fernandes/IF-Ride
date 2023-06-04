@@ -37,6 +37,8 @@ class RidesActivity : AppCompatActivity() {
         db = Firebase.firestore
         resultsRC = binding.rcResults
 
+        MainActivity.getInstance()!!.verifyAuthetication()
+
         chosenCity = intent.getStringExtra("city").toString()
 
         putOneWayRides()
@@ -77,7 +79,7 @@ class RidesActivity : AppCompatActivity() {
     private fun putReturnRides() {
         resultsRC.removeAllViews()
 
-       val ridesList: MutableList<RideModel> = mutableListOf()
+        val ridesList: MutableList<RideModel> = mutableListOf()
 
         val queryReturn = db.collection("Rides")
             .whereEqualTo("city", chosenCity)
@@ -114,14 +116,16 @@ class RidesActivity : AppCompatActivity() {
         if (txtView.text == "Ida") {
             if (nextTextView != null) {
                 txtView.setBackgroundResource(R.drawable.border_directions_left_selected)
+                nextTextView.setTextColor(resources.getColor(R.color.black))
                 nextTextView.setBackgroundResource(R.drawable.border_directions_right)
-                nextTextView.setTextColor(resources.getColor(R.color.solid_gray))
+                nextTextView.setTextColor(resources.getColor(R.color.white))
             }
         } else {
             if (previousTextView != null) {
                 txtView.setBackgroundResource(R.drawable.border_directions_right_selected)
+                txtView.setTextColor(resources.getColor(R.color.black))
                 previousTextView.setBackgroundResource(R.drawable.border_directions_left)
-                previousTextView.setTextColor(resources.getColor(R.color.solid_gray))
+                previousTextView.setTextColor(resources.getColor(R.color.white))
             }
         }
     }

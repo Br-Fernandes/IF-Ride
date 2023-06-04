@@ -24,6 +24,8 @@ class AccountActivity : AppCompatActivity() {
         db = Firebase.firestore
         auth = FirebaseAuth.getInstance()
 
+        MainActivity.getInstance()!!.verifyAuthetication()
+
         setUserNameOnTitle()
 
         logout()
@@ -88,18 +90,21 @@ class AccountActivity : AppCompatActivity() {
                     startActivity(intent)
                     overridePendingTransition(0, 0)
                     true
+                    finish()
                 }
                 R.id.rides -> {
                     val intent = Intent(this, RegisterRideActivity::class.java)
                     startActivity(intent)
                     overridePendingTransition(0, 0)
                     true
+                    finish()
                 }
                 R.id.mine_rides -> {
                     val intent = Intent(this, MineRidesActivity::class.java)
                     startActivity(intent)
                     overridePendingTransition(0, 0)
                     true
+                    finish()
                 }
                 R.id.account -> {
                     true

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_register">Registrar-se</string>
+    <string name="title_register">Registrar</string>
     <string name="registration_input">Matrícula</string>
     <string name="name_input">Nome Completo</string>
     <string name="email_input">Email</string>

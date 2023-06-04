@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.view.marginRight
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cesar.ifride.R
 import com.example.cesar.ifride.models.RideModel
@@ -67,11 +68,13 @@ class AdapterRide(
         dateHourRideLabel.apply {
             text = context.getString(R.string.date_hour_label)
             setTextAppearance(R.style.ride_label_text)
+            setTextColor(context.getColor(R.color.dark_gray))
         }
         dateHourRide.apply {
             text = Util.formatDate(ride.dateHour)
             setTextAppearance(R.style.ride_value_text)
             gravity = Gravity.CENTER
+            setTextColor(context.getColor(R.color.light_gray))
         }
         dateHourLayout.addView(dateHourRideLabel)
         dateHourLayout.addView(dateHourRide)
@@ -79,10 +82,12 @@ class AdapterRide(
         priceRideLabel.apply {
             text = context.getString(R.string.price_label)
             setTextAppearance(R.style.ride_label_text)
+            setTextColor(context.getColor(R.color.dark_gray))
         }
         priceRide.apply {
             text = ride.price
             setTextAppearance(R.style.ride_value_text)
+            setTextColor(context.getColor(R.color.light_gray))
             gravity = Gravity.CENTER
         }
         priceLayout.addView(priceRideLabel)
@@ -101,7 +106,7 @@ class AdapterRide(
         rideLayout.setOnClickListener {
             if (!isOpened){
                 val animator = ValueAnimator.ofInt(
-                    Util.dpToPx(context!!, 80f).toInt(),
+                    Util.dpToPx(context!!, 90f).toInt(),
                     Util.dpToPx(context, 450f).toInt()
                 )
                 animator.duration = 1000
@@ -127,11 +132,8 @@ class AdapterRide(
         var confirmBtn = setConfirmBtn(context,ride)
 
         rideLayout.addView(closeBtn)
-        //rideLayout.addView(viewTraceHorizontal())
         rideLayout.addView(dateAndPrice)
-       // rideLayout.addView(viewTraceHorizontal())
         rideLayout.addView(driverAndSeats)
-        //rideLayout.addView(viewTraceHorizontal())
         rideLayout.addView(confirmBtn)
     }
 
@@ -181,6 +183,7 @@ class AdapterRide(
         dateHourLabel.apply {
             text = context!!.getString(R.string.date_hour_label)
             setTextAppearance(R.style.ride_label_text)
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
         }
         dateHour.apply {
             text = Util.formatDate(ride.dateHour)
@@ -191,6 +194,7 @@ class AdapterRide(
         priceLabel.apply {
             text = context!!.getString(R.string.price_label)
             setTextAppearance(R.style.ride_label_text)
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
         }
         price.apply {
             text = ride.price.toString()
@@ -199,15 +203,16 @@ class AdapterRide(
         }
 
         llDateHourLayout.orientation = LinearLayout.VERTICAL
+        llDateHourLayout.setBackgroundResource(R.drawable.border_ride_informations)
         llDateHourLayout.addView(dateHourLabel)
         llDateHourLayout.addView(dateHour)
 
         llPriceLayout.orientation = LinearLayout.VERTICAL
+        llPriceLayout.setBackgroundResource(R.drawable.border_ride_informations)
         llPriceLayout.addView(priceLabel)
         llPriceLayout.addView(price)
 
         linearLayout.addView(llDateHourLayout)
-       // linearLayout.addView(viewTraceVertical())
         linearLayout.addView(llPriceLayout)
 
         return linearLayout
@@ -226,6 +231,7 @@ class AdapterRide(
         driverLabel.apply {
             text = context!!.getString(R.string.driver_label)
             setTextAppearance(R.style.ride_label_text)
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
         }
         driver.apply {
             db.collection("Users").whereEqualTo("registration", ride.driverRegistration)
@@ -242,6 +248,7 @@ class AdapterRide(
         carSeatsLabel.apply {
             text = context!!.getString(R.string.car_seats_label)
             setTextAppearance(R.style.ride_label_text)
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
         }
         carSeats.apply {
             text = ride.availableCarSeats.toString()
@@ -250,15 +257,16 @@ class AdapterRide(
         }
 
         llDriverLayout.orientation = LinearLayout.VERTICAL
+        llDriverLayout.setBackgroundResource(R.drawable.border_ride_informations)
         llDriverLayout.addView(driverLabel)
         llDriverLayout.addView(driver)
 
         llCarSeatsLayout.orientation = LinearLayout.VERTICAL
+        llCarSeatsLayout.setBackgroundResource(R.drawable.border_ride_informations)
         llCarSeatsLayout.addView(carSeatsLabel)
         llCarSeatsLayout.addView(carSeats)
 
         linearLayout.addView(llDriverLayout)
-        //linearLayout.addView(viewTraceVertical())
         linearLayout.addView(llCarSeatsLayout)
 
         return linearLayout
@@ -319,36 +327,12 @@ class AdapterRide(
         }
     }
 
-    private fun viewTraceHorizontal(): View? {
-        var view = View(context)
-        view.apply {
-            setBackgroundColor(resources.getColor(R.color.ciano))
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                Util.dpToPx(context,1f).toInt()
-            )
-        }
-        return view
-    }
-
-    private fun viewTraceVertical(): View? {
-        var view = View(context)
-        view.apply {
-            setBackgroundColor(resources.getColor(R.color.ciano))
-            layoutParams = ViewGroup.LayoutParams(
-                Util.dpToPx(context,1f).toInt(),
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-        }
-        return view
-    }
-
     private fun onCloseRideInformations(imageView: ImageView,rideLayout: LinearLayout, ride: RideModel)     {
         imageView.setOnClickListener {
             if (isOpened) {
                 val animator = ValueAnimator.ofInt(
                     Util.dpToPx(context!!, 450f).toInt(),
-                    Util.dpToPx(context, 80f).toInt()
+                    Util.dpToPx(context, 90f).toInt()
                 )
                 animator.duration = 1000
 

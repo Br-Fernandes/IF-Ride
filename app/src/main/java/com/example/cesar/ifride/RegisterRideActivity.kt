@@ -34,6 +34,8 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
         db = Firebase.firestore
         auth = FirebaseAuth.getInstance()
 
+        MainActivity.getInstance()!!.verifyAuthetication()
+
         verifyIsDriver()
 
         configureBottomNavigation()
@@ -190,6 +192,7 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
                     startActivity(intent)
                     overridePendingTransition(0,0)
                     true
+                    finish()
                 }
                 R.id.rides -> {
                     true
@@ -199,12 +202,14 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
                     startActivity(intent)
                     overridePendingTransition(0, 0)
                     true
+                    finish()
                 }
                 R.id.account -> {
                     val intent = Intent(this, AccountActivity::class.java)
                     startActivity(intent)
                     overridePendingTransition(0, 0)
                     true
+                    finish()
                 }
                 else -> Unit
             }

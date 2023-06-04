@@ -29,6 +29,8 @@ class RegisterDriverActivity : AppCompatActivity() {
         db = Firebase.firestore
         auth = Firebase.auth
 
+        MainActivity.getInstance()!!.verifyAuthetication()
+
         binding.btnSubmitRegisterDriver.setOnClickListener {
             registerDriver()
         }

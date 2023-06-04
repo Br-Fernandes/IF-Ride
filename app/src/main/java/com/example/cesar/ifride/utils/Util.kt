@@ -6,6 +6,8 @@ import android.content.Intent
 import android.view.Gravity
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat.startActivity
+import com.example.cesar.ifride.LoginActivity
+import com.example.cesar.ifride.R
 import com.example.cesar.ifride.RegisterDriverActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -38,9 +40,12 @@ class Util {
                 gravity = Gravity.CENTER
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
-                    dpToPx(context!!, 80f).toInt(),
+                    dpToPx(context!!, 100f).toInt(),
                     1f
-                )
+                ).apply {
+                    marginStart = dpToPx(context, 5f).toInt()
+                    marginEnd = dpToPx(context, 5f).toInt()
+                }
             }
             return linearLayout
         }
@@ -72,6 +77,10 @@ class Util {
                 layout.requestLayout()
             }
             animator.start()
+        }
+
+        fun verifyCurrentUser(): Boolean {
+            return (auth.currentUser == null)
         }
     }
 }

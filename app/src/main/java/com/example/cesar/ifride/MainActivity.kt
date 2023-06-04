@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.cesar.ifride.databinding.ActivityMainBinding
+import com.example.cesar.ifride.utils.Util
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
+        instance = this
 
         verifyAuthetication()
 
@@ -51,15 +53,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun verifyAuthetication() {
-        var currentUser = auth.currentUser
-        if (currentUser == null) {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-    }
-
     private fun configureBottomNavigation() {
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_nav)
         bottomNavigationView.selectedItemId = R.id.cities
@@ -74,18 +67,21 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                     overridePendingTransition(0,0)
                     true
+                    finish()
                 }
                 R.id.mine_rides -> {
                     val intent = Intent(this, MineRidesActivity::class.java)
                     startActivity(intent)
                     overridePendingTransition(0, 0)
                     true
+                    finish()
                 }
                 R.id.account -> {
                     val intent = Intent(this, AccountActivity::class.java)
                     startActivity(intent)
                     overridePendingTransition(0, 0)
                     true
+                    finish()
                 }
                 else -> Unit
             }
@@ -93,4 +89,20 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    companion object {
+        private var instance: MainActivity?  = null
+
+        fun getInstance(): MainActivity? {
+            return instance
+        }
+    }
+
+    fun verifyAuthetication() {
+        if (Util.verifyCurrentUser()) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
 }

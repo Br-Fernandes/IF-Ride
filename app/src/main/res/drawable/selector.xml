@@ -3,12 +3,13 @@
 
     <item
         android:state_selected="true"
-        android:drawable="@color/if_green"
-        android:color="@color/white_smoke"/>
+        android:drawable="@color/black"
+        android:color="@color/black"/>
 
     <item
         android:state_selected="false"
-        android:color="@color/black" />
+        android:drawable="@color/dark_gray"
+        android:color="@color/light_gray" />
 
 
 

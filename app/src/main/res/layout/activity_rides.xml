@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RidesActivity"
-    android:background="@color/dark_blue">
+    tools:context=".RidesActivity">
 
     <LinearLayout
         android:id="@+id/ll_options_directions"
@@ -25,7 +24,8 @@
             android:text="@string/txt_one_way"
             android:textAlignment="center"
             android:textSize="20sp"
-            android:background="@drawable/border_directions_left" />
+            android:background="@drawable/border_directions_left"
+            android:layout_marginRight="5dp"/>
 
         <TextView
             android:id="@+id/txt_return_option"
@@ -35,7 +35,8 @@
             android:text="@string/txt_return"
             android:textSize="20sp"
             android:textAlignment="center"
-            android:background="@drawable/border_directions_right" />
+            android:background="@drawable/border_directions_right"
+            android:layout_marginLeft="5dp"/>
 
     </LinearLayout>
 

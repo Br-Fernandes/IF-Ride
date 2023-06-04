@@ -41,6 +41,8 @@ class MineRidesActivity : AppCompatActivity() {
         resultsRC = binding.rcResults2
         instance = this
 
+        MainActivity.getInstance()!!.verifyAuthetication()
+
         seeRidesAsPassenger()
 
         binding.txtPassengerOption.setOnClickListener {
@@ -184,12 +186,14 @@ class MineRidesActivity : AppCompatActivity() {
                     startActivity(intent)
                     overridePendingTransition(0, 0)
                     true
+                    finish()
                 }
                 R.id.rides -> {
                     val intent = Intent(this, RegisterRideActivity::class.java)
                     startActivity(intent)
                     overridePendingTransition(0, 0)
                     true
+                    finish()
                 }
                 R.id.mine_rides -> {
                     true
@@ -199,6 +203,7 @@ class MineRidesActivity : AppCompatActivity() {
                     startActivity(intent)
                     overridePendingTransition(0, 0)
                     true
+                    finish()
                 }
                 else -> Unit
             }

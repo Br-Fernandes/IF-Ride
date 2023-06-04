@@ -4,9 +4,10 @@
         <shape xmlns:android="http://schemas.android.com/apk/res/android"
             android:shape="rectangle">
 
-            <corners android:radius="10dp"/>
+            <corners android:radius="24dp" />
 
-            <solid android:color="@color/green_accept"/>
+            <solid android:color="@color/dark_gray" />
+
         </shape>
     </item>
 </selector>

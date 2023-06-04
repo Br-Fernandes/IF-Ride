@@ -10,12 +10,17 @@
         android:id="@+id/title_cities"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/title_cities"
-        android:textColor="@color/black"
-        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/title_cities"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        android:shadowColor="#808080"
+        android:shadowDx="4"
+        android:shadowDy="4"
+        android:shadowRadius="4"
+
         android:layout_marginTop="20dp"/>
 
     <RelativeLayout
@@ -39,7 +44,7 @@
                 android:text="@string/ipameri"
                 android:textAlignment="center"
                 android:textSize="25dp"
-                android:textColor="@color/white"
+                android:textColor="@color/bold_white"
                 android:background="@drawable/border_cities"
                 android:layout_marginRight="7.5dp"/>
 
@@ -50,7 +55,7 @@
                 android:text="@string/orizona"
                 android:textAlignment="center"
                 android:textSize="25dp"
-                android:textColor="@color/white"
+                android:textColor="@color/bold_white"
                 android:background="@drawable/border_cities"
                 android:layout_marginLeft="7.5dp"/>
 
@@ -72,7 +77,7 @@
                 android:text="@string/palmelo"
                 android:textAlignment="center"
                 android:textSize="25dp"
-                android:textColor="@color/white"
+                android:textColor="@color/bold_white"
                 android:background="@drawable/border_cities"
                 android:layout_marginRight="7.5dp"/>
 
@@ -83,7 +88,7 @@
                 android:text="@string/pires_rio"
                 android:textAlignment="center"
                 android:textSize="25dp"
-                android:textColor="@color/white"
+                android:textColor="@color/bold_white"
                 android:background="@drawable/border_cities"
                 android:layout_marginLeft="7.5dp"/>
 
@@ -103,7 +108,7 @@
                 android:text="@string/urutai"
                 android:textAlignment="center"
                 android:textSize="25dp"
-                android:textColor="@color/white"
+                android:textColor="@color/bold_white"
                 android:background="@drawable/border_cities"
                 android:layout_marginRight="7.5dp"/>
 
@@ -114,7 +119,7 @@
                 android:text="@string/santa_cruz"
                 android:textAlignment="center"
                 android:textSize="25dp"
-                android:textColor="@color/white"
+                android:textColor="@color/bold_white"
                 android:background="@drawable/border_cities"
                 android:layout_marginLeft="7.5dp"/>
 
