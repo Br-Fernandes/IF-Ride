@@ -50,7 +50,7 @@ class MineRidesActivity : AppCompatActivity() {
         }
 
         binding.txtDriverOption.setOnClickListener {
-            verifyIsDriver { isDriver ->
+            Util.verifyIsDriver { isDriver ->
                 if (isDriver) {
                     seeRidesAsDriver()
                 } else {
@@ -161,19 +161,6 @@ class MineRidesActivity : AppCompatActivity() {
         }
     }
 
-    fun verifyIsDriver(callback: (Boolean) -> Unit) {
-        val query = Util.db.collection("Users").whereEqualTo("email", Util.auth.currentUser!!.email)
-        query.get().addOnSuccessListener { querySnapshot ->
-            val value = querySnapshot.documents[0].get("isDriver").toString().toBoolean()
-
-            if (!value) {
-                callback.invoke(false)
-            } else {
-                callback.invoke(true)
-            }
-        }
-    }
-
 
     private fun configureBottomNavigation() {
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_nav)
@@ -189,11 +176,18 @@ class MineRidesActivity : AppCompatActivity() {
                     finish()
                 }
                 R.id.rides -> {
-                    val intent = Intent(this, RegisterRideActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
-                    true
-                    finish()
+                    Util.verifyIsDriver { isDriver ->
+                        if (isDriver) {
+                            val intent = Intent(this, RegisterRideActivity::class.java)
+                            startActivity(intent)
+                            overridePendingTransition(0, 0)
+                            true
+                            finish()
+                        } else {
+                            val intent = Intent(this, RegisterDriverActivity::class.java)
+                            startActivity(intent)
+                        }
+                    }
                 }
                 R.id.mine_rides -> {
                     true

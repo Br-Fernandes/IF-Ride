@@ -68,7 +68,7 @@ class Util {
                 dpToPx(context!!, 80f).toInt(),
                 dpToPx(context, 450f).toInt()
             )
-            animator.duration = 1000
+            animator.duration = 0
 
             animator.addUpdateListener { animation ->
                 val height = animation.animatedValue as Int
@@ -81,6 +81,19 @@ class Util {
 
         fun verifyCurrentUser(): Boolean {
             return (auth.currentUser == null)
+        }
+
+        fun verifyIsDriver(callback: (Boolean) -> Unit) {
+            val query = db.collection("Users").whereEqualTo("email", auth.currentUser!!.email)
+            query.get().addOnSuccessListener { querySnapshot ->
+                val value = querySnapshot.documents[0].get("isDriver").toString().toBoolean()
+
+                if (!value) {
+                    callback.invoke(false)
+                } else {
+                    callback.invoke(true)
+                }
+            }
         }
     }
 }

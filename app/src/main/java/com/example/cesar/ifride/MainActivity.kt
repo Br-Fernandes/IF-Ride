@@ -63,11 +63,19 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.rides -> {
-                    val intent = Intent(this, RegisterRideActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(0,0)
-                    true
-                    finish()
+                    Util.verifyIsDriver { isDriver ->
+                        if (isDriver) {
+                            val intent = Intent(this, RegisterRideActivity::class.java)
+                            startActivity(intent)
+                            overridePendingTransition(0, 0)
+                            true
+                            finish()
+                        } else {
+                            val intent = Intent(this, RegisterDriverActivity::class.java)
+                            startActivity(intent)
+
+                        }
+                    }
                 }
                 R.id.mine_rides -> {
                     val intent = Intent(this, MineRidesActivity::class.java)

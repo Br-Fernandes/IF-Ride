@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import com.example.cesar.ifride.databinding.ActivityAccountBinding
+import com.example.cesar.ifride.utils.Util
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -41,7 +42,7 @@ class AccountActivity : AppCompatActivity() {
         val query = db.collection("Users").whereEqualTo("email", currentUserEmail)
         query.get().addOnSuccessListener { querySnapshot ->
             val currentUserName = querySnapshot.documents[0].get("name").toString()
-            val (firstName, secondName) = currentUserName.split(" ")
+            val (firstName) = currentUserName.split(" ")
             accountTitle.text = "Olá, $firstName"
         }
     }
@@ -93,11 +94,18 @@ class AccountActivity : AppCompatActivity() {
                     finish()
                 }
                 R.id.rides -> {
-                    val intent = Intent(this, RegisterRideActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
-                    true
-                    finish()
+                    Util.verifyIsDriver { isDriver ->
+                        if (isDriver) {
+                            val intent = Intent(this, RegisterRideActivity::class.java)
+                            startActivity(intent)
+                            overridePendingTransition(0, 0)
+                            true
+                            finish()
+                        } else {
+                            val intent = Intent(this, RegisterDriverActivity::class.java)
+                            startActivity(intent)
+                        }
+                    }
                 }
                 R.id.mine_rides -> {
                     val intent = Intent(this, MineRidesActivity::class.java)

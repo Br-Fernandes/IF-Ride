@@ -294,6 +294,7 @@ class AdapterRide(
             val db = Firebase.firestore
             val auth = FirebaseAuth.getInstance()
             val currentUserEmail = auth.currentUser!!.email
+            Log.d("TAG", currentUserEmail.toString())
 
             val query = db.collection("Users").whereEqualTo("email", currentUserEmail)
             query.get().addOnSuccessListener {querySnapshot ->

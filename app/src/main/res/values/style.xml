@@ -28,6 +28,7 @@
     </style>
 
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-
+        <item name="colorPrimary">@color/black</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
     </style>
 </resources>
