@@ -16,9 +16,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class Util {
-
-
-
     companion object {
         val db = Firebase.firestore
         val auth = FirebaseAuth.getInstance()

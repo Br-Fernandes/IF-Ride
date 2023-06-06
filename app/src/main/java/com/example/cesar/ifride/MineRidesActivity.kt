@@ -149,14 +149,16 @@ class MineRidesActivity : AppCompatActivity() {
         if (txtView.text == "Passageiro") {
             if (nextTextView != null) {
                 txtView.setBackgroundResource(R.drawable.border_directions_left_selected)
+                nextTextView.setTextColor(resources.getColor(R.color.black))
                 nextTextView.setBackgroundResource(R.drawable.border_directions_right)
-                nextTextView.setTextColor(resources.getColor(R.color.solid_gray))
+                nextTextView.setTextColor(resources.getColor(R.color.white))
             }
         } else {
             if (previousTextView != null) {
                 txtView.setBackgroundResource(R.drawable.border_directions_right_selected)
+                txtView.setTextColor(resources.getColor(R.color.black))
                 previousTextView.setBackgroundResource(R.drawable.border_directions_left)
-                previousTextView.setTextColor(resources.getColor(R.color.solid_gray))
+                previousTextView.setTextColor(resources.getColor(R.color.white))
             }
         }
     }

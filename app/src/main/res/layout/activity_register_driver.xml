@@ -6,101 +6,145 @@
     android:layout_height="match_parent"
     tools:context=".RegisterDriverActivity">
 
-    <LinearLayout
-        android:id="@+id/ll_title"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
+
+
+    <TextView
+        android:id="@+id/tv_title_register_driver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="30dp"
+        android:text="@string/title_register_driver"
+        android:textSize="25sp"
+        android:textColor="@color/black">
 
-        <TextView
-            android:id="@+id/tv_title_register_driver"
-            android:layout_width="wrap_content"
+    </TextView>
+
+    <LinearLayout
+        android:id="@+id/ll_inputs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/filled_et_cnh"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_register_driver"
-            android:textSize="25sp"
-            android:textColor="@color/black">
+            app:layout_constraintTop_toBottomOf="@id/tv_title_register_driver"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/border_inputs"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            style="@style/TextInputLayoutStyle">
 
-        </TextView>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_cnh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/cnh_input"
+                android:inputType="number"
+                android:paddingLeft="15dp"
+                android:background="@drawable/border_inputs"
+                app:hintAnimationEnabled="false"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/filled_et_carModel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/filled_et_cnh"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/border_inputs"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            style="@style/TextInputLayoutStyle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_carModel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/car_model_input"
+                android:inputType="text"
+                android:paddingLeft="15dp"
+                android:background="@drawable/border_inputs"
+                app:hintAnimationEnabled="false"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/filled_et_carColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/filled_et_carModel"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/border_inputs"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            style="@style/TextInputLayoutStyle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_carColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/car_color_input"
+                android:inputType="text"
+                android:paddingLeft="15dp"
+                android:background="@drawable/border_inputs"
+                app:hintAnimationEnabled="false"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/filled_et_plate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/filled_et_carColor"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/border_inputs"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            style="@style/TextInputLayoutStyle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_plate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/plate_input"
+                android:inputType="textCapWords"
+                android:paddingLeft="15dp"
+                android:background="@drawable/border_inputs"
+                app:hintAnimationEnabled="false"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/filled_et_cnh"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/ll_title"
-        android:layout_marginTop="15dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_cnh"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/cnh_input"
-            android:inputType="number"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/filled_et_carModel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/filled_et_cnh"
-        android:layout_marginTop="15dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_carModel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/car_model_input"
-            android:inputType="text"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/filled_et_carColor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/filled_et_carModel"
-        android:layout_marginTop="15dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_carColor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/car_color_input"
-            android:inputType="text"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/filled_et_plate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/filled_et_carColor"
-        android:layout_marginTop="15dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_plate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/plate_input"
-            android:inputType="textCapWords"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btn_submit_register_driver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/ll_inputs"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filled_et_plate"
         android:text="@string/btn_submit_register"
         android:backgroundTint="@color/light_black"/>
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:src="@drawable/if_ride_icon"
+        app:layout_constraintTop_toBottomOf="@id/btn_submit_register_driver"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
 
 

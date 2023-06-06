@@ -52,7 +52,7 @@ class AdapterRideAsDriver(
         cancelBtn.apply {
             text = resources.getText(R.string.cancel_ride_btn)
 
-            setBackgroundResource(R.drawable.border_confirm_ride)
+            setBackgroundResource(R.drawable.border_cancel_ride)
         }
 
         cancelBtnAction(cancelBtn, key, ride)
