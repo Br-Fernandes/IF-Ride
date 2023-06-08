@@ -38,9 +38,8 @@ class AdapterRideAsPassenger(
     override fun getItemCount() = ridesList.size
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        for ((key, ride) in ridesList) {
-            putRide(holder.rideLayout,key, ride)
-        }
+        val (key, ride) = ridesList.entries.elementAt(position)
+        putRide(holder.rideLayout, key, ride)
     }
 
     private fun putRide(rideLayout: LinearLayout ,key: String,ride: RideModel) {
@@ -56,7 +55,7 @@ class AdapterRideAsPassenger(
         var confirmBtn = Button(ContextThemeWrapper(context, R.style.ride_confirm_btn))
 
         confirmBtn.apply {
-            text = resources.getText(R.string.cancel_ride_btn)
+            text = resources.getText(R.string.giveup_ride_btn)
 
             setBackgroundResource(R.drawable.border_cancel_ride)
         }

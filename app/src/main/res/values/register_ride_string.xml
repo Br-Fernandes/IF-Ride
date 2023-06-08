@@ -4,8 +4,8 @@
     <string name="cities_input">Cidades</string>
     <string name="direction_input">Direção</string>
     <string name="price_input">Preço em R$</string>
-    <string name="car_seats_input">Assentos Disponíveis</string>
-    <string name="date_hour_btn">Escolher Data e Hora</string>
+    <string name="car_seats_input">Vagas Disponíveis</string>
+    <string name="date_hour_btn">Selecionar Data e Hora</string>
     <string-array name="cities_array">
         <item>Cidades</item>
         <item>Ipameri</item>

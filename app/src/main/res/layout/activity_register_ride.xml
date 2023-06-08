@@ -6,33 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".RegisterRideActivity">
 
-    <LinearLayout
-        android:id="@+id/ll_title"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:gravity="center"
+    <TextView
+        android:id="@+id/tv_title_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toTopOf="@+id/ll_content1"
+        android:layout_marginTop="15dp"
+        android:text="@string/title_register_ride"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        android:shadowColor="#808080"
+        android:shadowDx="4"
+        android:shadowDy="4"
+        android:shadowRadius="4">
 
-        <TextView
-            android:id="@+id/tv_title_register"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/title_register_ride"
-            android:textSize="25sp"
-            android:textColor="@color/black">
+    </TextView>
 
-        </TextView>
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_content1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/ll_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_register"
         android:orientation="horizontal"
-        android:layout_marginTop="50dp">
+        android:layout_marginTop="80dp">
 
         <Spinner
             android:id="@+id/spinner_cities"
@@ -55,7 +55,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/ll_content1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="50dp">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/filled_et_price"
@@ -63,14 +64,21 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginTop="15dp"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            android:background="@drawable/border_inputs"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            style="@style/TextInputLayoutStyle">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/price_input"
-                android:inputType="number"/>
+                android:inputType="number"
+                android:paddingLeft="15dp"
+                android:background="@drawable/border_inputs"
+                app:hintAnimationEnabled="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -80,38 +88,70 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginTop="15dp"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            android:background="@drawable/border_inputs"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            style="@style/TextInputLayoutStyle">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_car_seats"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/car_seats_input"
-                android:inputType="number" />
+                android:inputType="number"
+                android:paddingLeft="15dp"
+                android:background="@drawable/border_inputs"
+                app:hintAnimationEnabled="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_date_hour"
+    <LinearLayout
+        android:id="@+id/ll_content3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/ll_content2"
-        android:text="@string/date_hour_btn"
-        android:layout_margin="15dp"/>
+        app:layout_constraintTop_toBottomOf="@id/ll_content2"
+        android:layout_marginTop="50dp"
+        android:gravity="center_vertical">
+
+        <Button
+            android:id="@+id/btn_date_hour"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/dark_gray"
+            android:text="@string/date_hour_btn"
+            android:textSize="20sp"
+            android:textAllCaps="false"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
+
+        <TextView
+            android:id="@+id/txt_saved_date_hour"
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:background="@drawable/border_rides"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:visibility="invisible"/>
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_register_ride"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/btn_date_hour"
+        app:layout_constraintTop_toBottomOf="@+id/ll_content3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/register_ride_btn"/>
 
     <include
-        layout="@layout/layout_bottom_navbar"/>
+        layout="@layout/layout_bottom_navbar"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

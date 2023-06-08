@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
@@ -167,6 +168,9 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
     override fun onTimeSet(p0: TimePicker?, hourOfDay: Int, minute: Int) {
         savedHour = hourOfDay
         savedMinute = minute
+
+        binding.txtSavedDateHour.text = Util.formatDate("$savedDay-$savedMonth-$savedYear-$savedHour-$savedMinute")
+        binding.txtSavedDateHour.visibility = View.VISIBLE
     }
 
     fun verifyIsDriver() {

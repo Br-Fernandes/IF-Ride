@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cesar.ifride.adapters.AdapterRideAsDriver
 import com.example.cesar.ifride.adapters.AdapterRideAsPassenger
 import com.example.cesar.ifride.databinding.ActivityMineRidesBinding
 import com.example.cesar.ifride.models.RideModel
@@ -91,7 +92,7 @@ class MineRidesActivity : AppCompatActivity() {
                             }
                         }
                     }
-                    initRecyclerView(ridesList)
+                    initRecyclerViewAsPassenger(ridesList)
                 }
                 .addOnFailureListener { e ->
                     Log.d("TAG", "Erro ao buscar corridas com a matricula do passageiro", e)
@@ -102,12 +103,6 @@ class MineRidesActivity : AppCompatActivity() {
             Log.d("TAG", "Erro ao buscar usuario com o email $currentUserEmail", e)
         }
         personalizeBtn(binding.txtPassengerOption)
-    }
-
-    fun initRecyclerView(ridesList: Map<String, RideModel>) {
-        resultsRC.layoutManager = LinearLayoutManager(this)
-        resultsRC.setHasFixedSize(true)
-        resultsRC.adapter = AdapterRideAsPassenger(this, ridesList)
     }
 
     private fun seeRidesAsDriver() {
@@ -131,11 +126,26 @@ class MineRidesActivity : AppCompatActivity() {
                             ridesList[document.id] = ride
                         }
                     }
+                    initRecyclerViewAsDriver(ridesList)
                 }
             }
+        } .addOnFailureListener { e ->
+            Log.d("TAG", "não achou", e)
         }
 
         personalizeBtn(binding.txtDriverOption)
+    }
+
+    fun initRecyclerViewAsPassenger(ridesList: Map<String, RideModel>) {
+        resultsRC.layoutManager = LinearLayoutManager(this)
+        resultsRC.setHasFixedSize(true)
+        resultsRC.adapter = AdapterRideAsPassenger(this, ridesList)
+    }
+
+    fun initRecyclerViewAsDriver(ridesList: Map<String, RideModel>) {
+        resultsRC.layoutManager = LinearLayoutManager(this)
+        resultsRC.setHasFixedSize(true)
+        resultsRC.adapter = AdapterRideAsDriver(this, ridesList)
     }
 
     private fun personalizeBtn(txtView: TextView) {

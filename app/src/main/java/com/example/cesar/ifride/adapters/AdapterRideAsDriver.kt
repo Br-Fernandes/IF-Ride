@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cesar.ifride.R
 import com.example.cesar.ifride.models.RideModel
@@ -31,18 +32,48 @@ class AdapterRideAsDriver(
     override fun getItemCount() = ridesList.size
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        for ((key, ride) in ridesList) {
-            putRide(holder.rideLayout,key, ride)
-        }
+        val (key, ride) = ridesList.entries.elementAt(position)
+        putRide(holder.rideLayout, key, ride)
     }
 
     private fun putRide(rideLayout: LinearLayout, key: String, ride: RideModel) {
         Util.linearLayoutAnimator(context!!,rideLayout)
 
         rideLayout.addView(adapterRide.setDateAndPrice(this.context,ride))
-        rideLayout.addView(adapterRide.setDriverAndSeats(this.context,ride))
+        rideLayout.addView(setSeats(ride))
         rideLayout.addView(setCancelRideBtn(key, ride))
+    }
 
+    private fun setSeats(ride: RideModel): LinearLayout {
+        var llCarSeatsLayout = Util.standardLinearLayout(context)
+        llCarSeatsLayout.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            Util.dpToPx(this.context, 80f).toInt()
+        ).apply {
+            marginStart = Util.dpToPx(context, 10f).toInt()
+            marginEnd = Util.dpToPx(context, 10f).toInt()
+        }
+
+        var carSeats = TextView(context)
+        var carSeatsLabel = TextView(context)
+
+        carSeatsLabel.apply {
+            text = context!!.getString(R.string.car_seats_label)
+            setTextAppearance(R.style.ride_label_text)
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
+        }
+        carSeats.apply {
+            text = ride.availableCarSeats.toString()
+            setTextAppearance(R.style.ride_value_text)
+            gravity = Gravity.CENTER
+        }
+
+        llCarSeatsLayout.orientation = LinearLayout.VERTICAL
+        llCarSeatsLayout.setBackgroundResource(R.drawable.border_ride_informations)
+        llCarSeatsLayout.addView(carSeatsLabel)
+        llCarSeatsLayout.addView(carSeats)
+
+        return llCarSeatsLayout
     }
 
     private fun setCancelRideBtn(key: String, ride: RideModel): View? {

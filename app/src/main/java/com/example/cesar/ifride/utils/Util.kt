@@ -57,7 +57,7 @@ class Util {
             val formatedDate = formateOutDate.format(data)
             val formatedHour = formateSOutHour.format(data)
 
-            return "$formatedDate\n$formatedHour"
+            return "$formatedDate\nàs $formatedHour"
         }
 
         fun linearLayoutAnimator(context: Context ,layout: LinearLayout) {

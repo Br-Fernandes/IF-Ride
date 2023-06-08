@@ -3,5 +3,6 @@
     <string name="txt_choose_mine_rides">Ver suas Caronas como:</string>
     <string name="txt_passenger">Passageiro</string>
     <string name="txt_driver">Motorista</string>
-    <string name="cancel_ride_btn">Desistir da Carona</string>
+    <string name="giveup_ride_btn">Desistir</string>
+    <string name="cancel_ride_btn">Cancelar Carona</string>
 </resources>
