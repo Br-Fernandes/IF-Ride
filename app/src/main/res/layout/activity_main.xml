@@ -1,133 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container_drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/title_cities"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/title_cities"
-        android:textColor="@color/black"
-        android:textSize="25sp"
-        android:shadowColor="#808080"
-        android:shadowDx="4"
-        android:shadowDy="4"
-        android:shadowRadius="4"
-
-        android:layout_marginTop="20dp"/>
-
-    <RelativeLayout
-        android:id="@+id/rl_cities"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_cities"
-        android:padding="15dp">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/ll_cities_row_one"
+
+        <TextView
+            android:id="@+id/title_cities"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/title_cities"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:shadowColor="#808080"
+            android:shadowDx="4"
+            android:shadowDy="4"
+            android:shadowRadius="4"
+
+            android:layout_marginTop="20dp"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_cities"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title_cities"
+            android:padding="15dp">
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/ll_cities_row_one"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="@string/ipameri"
+                    android:textAlignment="center"
+                    android:textSize="25dp"
+                    android:textColor="@color/bold_white"
+                    android:background="@drawable/border_cities"
+                    android:layout_marginRight="7.5dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="@string/orizona"
+                    android:textAlignment="center"
+                    android:textSize="25dp"
+                    android:textColor="@color/bold_white"
+                    android:background="@drawable/border_cities"
+                    android:layout_marginLeft="7.5dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_cities_row_two"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_weight="1"
-                android:text="@string/ipameri"
-                android:textAlignment="center"
-                android:textSize="25dp"
-                android:textColor="@color/bold_white"
-                android:background="@drawable/border_cities"
-                android:layout_marginRight="7.5dp"/>
+                android:layout_below="@+id/ll_cities_row_one"
+                android:orientation="horizontal"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="40dp">
 
-            <TextView
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="@string/palmelo"
+                    android:textAlignment="center"
+                    android:textSize="25dp"
+                    android:textColor="@color/bold_white"
+                    android:background="@drawable/border_cities"
+                    android:layout_marginRight="7.5dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="@string/pires_rio"
+                    android:textAlignment="center"
+                    android:textSize="25dp"
+                    android:textColor="@color/bold_white"
+                    android:background="@drawable/border_cities"
+                    android:layout_marginLeft="7.5dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_cities_row_three"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:text="@string/orizona"
-                android:textAlignment="center"
-                android:textSize="25dp"
-                android:textColor="@color/bold_white"
-                android:background="@drawable/border_cities"
-                android:layout_marginLeft="7.5dp"/>
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_cities_row_two"
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="@string/urutai"
+                    android:textAlignment="center"
+                    android:textSize="25dp"
+                    android:textColor="@color/bold_white"
+                    android:background="@drawable/border_cities"
+                    android:layout_marginRight="7.5dp"/>
 
-        <LinearLayout
-            android:id="@+id/ll_cities_row_two"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_below="@+id/ll_cities_row_one"
-            android:orientation="horizontal"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="40dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="@string/santa_cruz"
+                    android:textAlignment="center"
+                    android:textSize="25dp"
+                    android:textColor="@color/bold_white"
+                    android:background="@drawable/border_cities"
+                    android:layout_marginLeft="7.5dp"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:text="@string/palmelo"
-                android:textAlignment="center"
-                android:textSize="25dp"
-                android:textColor="@color/bold_white"
-                android:background="@drawable/border_cities"
-                android:layout_marginRight="7.5dp"/>
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:text="@string/pires_rio"
-                android:textAlignment="center"
-                android:textSize="25dp"
-                android:textColor="@color/bold_white"
-                android:background="@drawable/border_cities"
-                android:layout_marginLeft="7.5dp"/>
+        </RelativeLayout>
 
-        </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_cities_row_three"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/ll_cities_row_two"
-            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:text="@string/urutai"
-                android:textAlignment="center"
-                android:textSize="25dp"
-                android:textColor="@color/bold_white"
-                android:background="@drawable/border_cities"
-                android:layout_marginRight="7.5dp"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:text="@string/santa_cruz"
-                android:textAlignment="center"
-                android:textSize="25dp"
-                android:textColor="@color/bold_white"
-                android:background="@drawable/border_cities"
-                android:layout_marginLeft="7.5dp"/>
+        <include
+            layout="@layout/layout_bottom_navbar"/>
 
-        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </RelativeLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_view"
+        android:background="@color/gray"
+        app:headerLayout="@layout/header_account"
+        app:menu="@menu/menu_account"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start" />
 
-    <include
-        layout="@layout/layout_bottom_navbar"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

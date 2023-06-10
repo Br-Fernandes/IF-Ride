@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="registration_data">Matrícula</string>
+    <string name="email_data">Email</string>
+    <string name="phone_data">Telefone</string>
+    <string name="model_car_data">Modelo do Veículo</string>
+    <string name="car_color_data">Cor do Veículo</string>
+    <string name="car_plate_data">Placa</string>
+</resources>

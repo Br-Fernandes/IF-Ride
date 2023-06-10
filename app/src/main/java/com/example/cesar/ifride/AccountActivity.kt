@@ -30,6 +30,7 @@ class AccountActivity : AppCompatActivity() {
         setUserNameOnTitle()
 
         logout()
+
         deleteAccount()
 
         configureBottomNavigation()

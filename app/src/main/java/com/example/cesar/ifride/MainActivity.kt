@@ -7,7 +7,10 @@ import android.util.Log
 
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.example.cesar.ifride.databinding.ActivityMainBinding
+import com.example.cesar.ifride.utils.AccountSideBar
 import com.example.cesar.ifride.utils.Util
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -17,14 +20,16 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
+    private lateinit var drawerLayout: DrawerLayout
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
         instance = this
+        drawerLayout = findViewById(R.id.container_drawer)
 
         verifyAuthetication()
 
@@ -59,44 +64,38 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.cities -> {
-                    true
-                }
+                R.id.cities -> true
                 R.id.rides -> {
                     Util.verifyIsDriver { isDriver ->
                         if (isDriver) {
                             val intent = Intent(this, RegisterRideActivity::class.java)
                             startActivity(intent)
                             overridePendingTransition(0, 0)
-                            true
                             finish()
                         } else {
                             val intent = Intent(this, RegisterDriverActivity::class.java)
                             startActivity(intent)
-
                         }
                     }
+                    true
                 }
                 R.id.mine_rides -> {
                     val intent = Intent(this, MineRidesActivity::class.java)
                     startActivity(intent)
                     overridePendingTransition(0, 0)
-                    true
                     finish()
+                    true
                 }
                 R.id.account -> {
-                    val intent = Intent(this, AccountActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
+                    AccountSideBar.configureSideBar(drawerLayout)
                     true
-                    finish()
                 }
                 else -> Unit
             }
             false
         }
-
     }
+
 
     companion object {
         private var instance: MainActivity?  = null
@@ -112,5 +111,4 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
 }

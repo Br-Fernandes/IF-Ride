@@ -9,10 +9,12 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.cesar.ifride.databinding.ActivityRegisterRideBinding
 import com.example.cesar.ifride.models.RideModel
+import com.example.cesar.ifride.utils.AccountSideBar
 import com.example.cesar.ifride.utils.MoneyTextWatcher
 import com.example.cesar.ifride.utils.Util
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -27,6 +29,7 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
     private lateinit var binding:  ActivityRegisterRideBinding
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +37,7 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
         setContentView(binding.root)
         db = Firebase.firestore
         auth = FirebaseAuth.getInstance()
+        drawerLayout = findViewById(R.id.container_drawer)
 
         MainActivity.getInstance()!!.verifyAuthetication()
 
@@ -209,11 +213,8 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
                     finish()
                 }
                 R.id.account -> {
-                    val intent = Intent(this, AccountActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
+                    AccountSideBar.configureSideBar(drawerLayout)
                     true
-                    finish()
                 }
                 else -> Unit
             }
