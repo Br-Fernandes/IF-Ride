@@ -41,6 +41,7 @@
             android:hint="@string/registration_input"
             android:inputType="number"
             android:paddingLeft="15dp"
+            android:maxLength="16"
             android:background="@drawable/border_inputs"
             app:hintAnimationEnabled="false"/>
 
@@ -109,6 +110,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/phone_input"
             android:inputType="phone"
+            android:maxLength="11"
             android:paddingLeft="15dp"
             android:background="@drawable/border_inputs"
             app:hintAnimationEnabled="false"/>
