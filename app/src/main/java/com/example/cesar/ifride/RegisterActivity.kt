@@ -55,6 +55,7 @@ class RegisterActivity : AppCompatActivity() {
         )
 
         val userInfo = UserInfo(
+            userLogin = binding.etRegistration.text.toString().trim(),
             userName = binding.etName.text.toString().trim(),
             userEmail = email,
             userPhone = binding.etPhone.text.toString().trim()
@@ -80,6 +81,14 @@ class RegisterActivity : AppCompatActivity() {
                                         .addOnCompleteListener { dbTask ->
                                             if (dbTask.isSuccessful) {
                                                 Log.d(TAG, "O documento foi adicionado com sucesso")
+                                                apiService.addUser(userInfo) {
+                                                    if (it?.userEmail != null) {
+                                                        print("\n\n\n\nSuccess registering new user")
+                                                    } else {
+                                                        print("\n\n\n\nError registering new user")
+                                                    }
+                                                }
+                                                openLoginActivity()
                                             } else {
                                                 Log.w(TAG, "Erro ao adicionar documento", dbTask.exception)
                                             }
@@ -100,13 +109,7 @@ class RegisterActivity : AppCompatActivity() {
         }
 
 
-        apiService.addUser(userInfo) {
-            if (it?.userEmail != null) {
-                print("\n\n\n\nSuccess registering new user")
-            } else {
-                print("\n\n\n\nError registering new user")
-            }
-        }
+
     }
 
     fun validatingInputs(): Boolean {
