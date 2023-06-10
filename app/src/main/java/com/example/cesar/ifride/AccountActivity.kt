@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import com.example.cesar.ifride.databinding.ActivityAccountBinding
+import com.example.cesar.ifride.entities.UserInfo
+import com.example.cesar.ifride.utils.RestApiService
 import com.example.cesar.ifride.utils.Util
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -17,6 +19,7 @@ class AccountActivity : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityAccountBinding
+    private var emailService = RestApiService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,8 +68,24 @@ class AccountActivity : AppCompatActivity() {
 
                 val query = db.collection("Users").whereEqualTo("email", currentUser!!.email)
                 query.get().addOnSuccessListener { querySnapshot ->
+
+                    val document = querySnapshot.documents[0]
+                    val name = document.getString("name")
+                    val email = document.getString("email")
+                    val phone = document.getString("phone")
+                    val userInfo = UserInfo(document.id, name, email, phone)
+
                     querySnapshot.documents[0].reference.delete().addOnSuccessListener {
                         currentUser.delete()
+
+                        emailService.deleteUser(userInfo) {
+                            if (it?.userEmail != null) {
+                                print("\n\n\n\nSuccess deleting user")
+                            } else {
+                                print("\n\n\n\nError deleting user")
+                            }
+                        }
+
                         val intent = Intent(this, RegisterActivity::class.java)
                         startActivity(intent)
                     }
