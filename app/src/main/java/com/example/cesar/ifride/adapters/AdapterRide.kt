@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cesar.ifride.R
+import com.example.cesar.ifride.RidesActivity
 import com.example.cesar.ifride.models.RideModel
 import com.example.cesar.ifride.utils.Util
 import com.google.firebase.auth.FirebaseAuth
@@ -22,12 +23,12 @@ import com.google.firebase.ktx.Firebase
 
 class AdapterRide(
 
-    private val context: Context?,
+    private val activity: RidesActivity?,
     private val ridesList: Map<String, RideModel>
 
 ) : RecyclerView.Adapter<AdapterRide.MyViewHolder>() {
 
-    constructor() : this(context = null, ridesList = emptyMap())
+    constructor() : this(activity = null, ridesList = emptyMap())
 
     var isOpened = false
     var db = Firebase.firestore
@@ -43,7 +44,7 @@ class AdapterRide(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val (key, ride) = ridesList.entries.elementAt(position)
-        putRide(this.context ,holder.rideLayout, key, ride)
+        putRide(this.activity!!.baseContext ,holder.rideLayout, key, ride)
     }
 
     override fun getItemCount() = ridesList.size
@@ -101,10 +102,10 @@ class AdapterRide(
         rideLayout.setOnClickListener {
             if (!isOpened){
                 val animator = ValueAnimator.ofInt(
-                    Util.dpToPx(context!!, 90f).toInt(),
+                    Util.dpToPx(context!!, 100f).toInt(),
                     Util.dpToPx(context, 450f).toInt()
                 )
-                animator.duration = 800
+                animator.duration = 700
 
                 animator.addUpdateListener { animation ->
                     val height = animation.animatedValue as Int
@@ -119,7 +120,7 @@ class AdapterRide(
         }
     }
 
-    public fun putRideInformations(context: Context, rideLayout: LinearLayout, key: String, ride: RideModel) {
+    fun putRideInformations(context: Context, rideLayout: LinearLayout, key: String, ride: RideModel) {
         rideLayout.orientation = LinearLayout.VERTICAL
         var closeBtn = setCloseBtn(context,rideLayout, key ,ride)
         var dateAndPrice =  setDateAndPrice(context,ride)
@@ -133,7 +134,7 @@ class AdapterRide(
     }
 
     public fun setCloseBtn(context: Context, rideLayout: LinearLayout, key: String , ride: RideModel): LinearLayout {
-        var linearLayout = Util.standardLinearLayout(this.context)
+        var linearLayout = Util.standardLinearLayout(this.activity!!.baseContext)
         linearLayout.apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -141,7 +142,7 @@ class AdapterRide(
             )
         }
 
-        var imageView = ImageView(this.context)
+        var imageView = ImageView(this.activity.baseContext)
         imageView.apply {
             setImageDrawable(ContextCompat.getDrawable(context, R.drawable.close_x))
             background = resources.getDrawable(R.drawable.circle_border)
@@ -312,6 +313,9 @@ class AdapterRide(
 
                     db.collection("Rides").document(key).update(updates)
                         .addOnSuccessListener {
+                            if (ride.direction == "Ida") activity!!.putOneWayRides()
+                            else activity!!.putReturnRides()
+
                             Log.d("TAG", "Atualizou a Carona com sucesso")
                         }
                         .addOnFailureListener { e ->
@@ -327,10 +331,10 @@ class AdapterRide(
         imageView.setOnClickListener {
             if (isOpened) {
                 val animator = ValueAnimator.ofInt(
-                    Util.dpToPx(context!!, 450f).toInt(),
-                    Util.dpToPx(context, 90f).toInt()
+                    Util.dpToPx(this.activity!!.baseContext!!, 450f).toInt(),
+                    Util.dpToPx(this.activity.baseContext, 100f).toInt()
                 )
-                animator.duration = 1000
+                animator.duration = 300
 
                 animator.addUpdateListener { animation ->
                     val height = animation.animatedValue as Int
@@ -339,7 +343,7 @@ class AdapterRide(
                 }
                 animator.start()
                 Util.removeLinearLayoutChildren(rideLayout)
-                putRide(this.context, rideLayout, key ,ride)
+                putRide(this.activity.baseContext, rideLayout, key ,ride)
                 rideLayout.orientation = LinearLayout.HORIZONTAL
                 isOpened = false
             }

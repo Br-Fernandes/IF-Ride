@@ -38,8 +38,6 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
 
         MainActivity.getInstance()!!.verifyAuthetication()
 
-        verifyIsDriver()
-
         configureBottomNavigation()
 
         configureInputs()
@@ -83,6 +81,9 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
 
         db.collection("Rides").add(newRide)
             .addOnSuccessListener {
+                var intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
                 Log.d("TAG", "Adicionado com sucesso")
             }
             .addOnFailureListener { e ->
@@ -172,18 +173,6 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
 
         binding.txtSavedDateHour.text = Util.formatDate("$savedDay-$savedMonth-$savedYear-$savedHour-$savedMinute")
         binding.txtSavedDateHour.visibility = View.VISIBLE
-    }
-
-    fun verifyIsDriver() {
-        val query = Util.db.collection("Users").whereEqualTo("email", Util.auth.currentUser!!.email)
-        query.get().addOnSuccessListener { querySnapshot ->
-            val value = querySnapshot.documents[0].get("isDriver").toString().toBoolean()
-
-            if (!value) {
-                val intent = Intent(this, RegisterDriverActivity::class.java)
-                startActivity(intent)
-            }
-        }
     }
 
     private fun configureBottomNavigation() {

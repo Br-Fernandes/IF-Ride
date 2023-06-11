@@ -2,13 +2,10 @@ package com.example.cesar.ifride.utils
 
 import android.animation.ValueAnimator
 import android.content.Context
-import android.content.Intent
+
 import android.view.Gravity
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat.startActivity
-import com.example.cesar.ifride.LoginActivity
-import com.example.cesar.ifride.R
-import com.example.cesar.ifride.RegisterDriverActivity
+
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -63,7 +60,7 @@ class Util {
         fun linearLayoutAnimator(context: Context ,layout: LinearLayout) {
             val animator = ValueAnimator.ofInt(
                 dpToPx(context!!, 100f).toInt(),
-                dpToPx(context, 410f).toInt()
+                dpToPx(context, 390f).toInt()
             )
             animator.duration = 0
 

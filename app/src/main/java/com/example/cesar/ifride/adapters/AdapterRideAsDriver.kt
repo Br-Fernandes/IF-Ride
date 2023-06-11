@@ -1,12 +1,12 @@
 package com.example.cesar.ifride.adapters
 
-import android.content.Context
 import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cesar.ifride.MineRidesActivity
 import com.example.cesar.ifride.R
 import com.example.cesar.ifride.models.RideModel
 import com.example.cesar.ifride.utils.Util
@@ -14,7 +14,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class AdapterRideAsDriver(
-    private val context: Context?,
+    private val activity: MineRidesActivity?,
     private val ridesList: Map<String, RideModel>
 ) : RecyclerView.Adapter<AdapterRideAsDriver.MyViewHolder>() {
 
@@ -37,25 +37,25 @@ class AdapterRideAsDriver(
     }
 
     private fun putRide(rideLayout: LinearLayout, key: String, ride: RideModel) {
-        Util.linearLayoutAnimator(context!!,rideLayout)
+        Util.linearLayoutAnimator(activity!!.baseContext,rideLayout)
 
-        rideLayout.addView(adapterRide.setDateAndPrice(this.context,ride))
+        rideLayout.addView(adapterRide.setDateAndPrice(this.activity,ride))
         rideLayout.addView(setSeats(ride))
         rideLayout.addView(setCancelRideBtn(key, ride))
     }
 
     private fun setSeats(ride: RideModel): LinearLayout {
-        var llCarSeatsLayout = Util.standardLinearLayout(context)
+        var llCarSeatsLayout = Util.standardLinearLayout(activity!!.baseContext)
         llCarSeatsLayout.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
-            Util.dpToPx(this.context, 80f).toInt()
+            Util.dpToPx(this.activity, 80f).toInt()
         ).apply {
-            marginStart = Util.dpToPx(context, 10f).toInt()
-            marginEnd = Util.dpToPx(context, 10f).toInt()
+            marginStart = Util.dpToPx(activity!!.baseContext, 10f).toInt()
+            marginEnd = Util.dpToPx(activity.baseContext, 10f).toInt()
         }
 
-        var carSeats = TextView(context)
-        var carSeatsLabel = TextView(context)
+        var carSeats = TextView(activity)
+        var carSeatsLabel = TextView(activity)
 
         carSeatsLabel.apply {
             text = context!!.getString(R.string.car_seats_label)
@@ -77,8 +77,8 @@ class AdapterRideAsDriver(
     }
 
     private fun setCancelRideBtn(key: String, ride: RideModel): View? {
-        var linearLayout = Util.standardLinearLayout(context)
-        var cancelBtn = Button(ContextThemeWrapper(context, R.style.ride_confirm_btn))
+        var linearLayout = Util.standardLinearLayout(activity!!.baseContext)
+        var cancelBtn = Button(ContextThemeWrapper(activity.baseContext, R.style.ride_confirm_btn))
 
         cancelBtn.apply {
             text = resources.getText(R.string.cancel_ride_btn)
@@ -100,12 +100,11 @@ class AdapterRideAsDriver(
 
             db.collection("Rides").document(key).delete().addOnSuccessListener {
                 Log.d("TAG", "Carona excluida com sucesso")
+                activity!!.seeRidesAsDriver()
             }
             .addOnFailureListener { e ->
                 Log.d("TAG", "Erro ao excluir carona", e)
             }
         }
     }
-
-
 }
