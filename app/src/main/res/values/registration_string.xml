@@ -10,4 +10,10 @@
     <string name="text_login_activity_1">Já possui uma conta?</string>
     <string name="text_login_activity_2">  Clique aqui</string>
     <string name="btn_submit_register">Cadastrar</string>
+
+    <string name="invalid_name">O nome não deve estar vazio ou conter caracteres especiais!</string>
+    <string name="invalid_registration">A matrícula deve ter 16 dígitos!</string>
+    <string name="invalid_email">Email inválido!</string>
+    <string name="invalid_phone">Telefone inválido! (DDD + número)</string>
+    <string name="invalid_password">As senhas devem coincidir!</string>
 </resources>
