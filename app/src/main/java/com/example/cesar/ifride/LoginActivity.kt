@@ -57,6 +57,10 @@ class LoginActivity : AppCompatActivity() {
             .addOnFailureListener { e ->
                 Log.d(TAG, "Deu ruim", e)
             }
+
+        if (!userRef.get().isSuccessful)
+            binding.loginErrorMessage.setText(R.string.error_message)
+
     }
 
     private fun loginEmailPassword(email: String?, password: String) {
@@ -69,27 +73,14 @@ class LoginActivity : AppCompatActivity() {
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                     } else {
-
                         val exception = task.exception
-
                     }
                 }
         }
     }
 
-    public override fun onStart() {
-        super.onStart()
-
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-
-        }
-
-    }
-
     private fun openRegisterActivity() {
         val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
-        finish()
     }
 }

@@ -107,13 +107,14 @@ class RegisterActivity : AppCompatActivity() {
             }
         } else {
             Log.d(TAG, "Dados inválidos!")
+            validateEachFieldAndShowErrorMessage()
         }
 
 
 
     }
 
-    fun validatingInputs(): Boolean {
+    private fun validatingInputs(): Boolean {
         val validation = Validation()
 
         return  validation.registrationValidation(binding.etRegistration.text.toString().trim()) &&
@@ -121,6 +122,25 @@ class RegisterActivity : AppCompatActivity() {
                 validation.emailValidation(binding.etEmail.text.toString().trim()) &&
                 validation.phoneValidation(binding.etPhone.text.toString().trim()) &&
                 validation.passwordValidation(binding.etPassword.text.toString().trim(), binding.etRepeatPassword.text.toString().trim())
+    }
+
+    private fun validateEachFieldAndShowErrorMessage() {
+        val validation = Validation()
+        var errorMessage = 0
+
+        if(!validation.passwordValidation(binding.etPassword.text.toString().trim(), binding.etRepeatPassword.text.toString().trim()))
+            errorMessage = R.string.invalid_password
+        if(!validation.phoneValidation(binding.etPhone.text.toString().trim()))
+            errorMessage = R.string.invalid_phone
+        if(!validation.emailValidation(binding.etEmail.text.toString().trim()))
+            errorMessage = R.string.invalid_email
+        if(!validation.nameValidation(binding.etName.text.toString().trim()))
+            errorMessage = R.string.invalid_name
+        if(!validation.registrationValidation(binding.etRegistration.text.toString().trim()))
+            errorMessage = R.string.invalid_registration
+
+        if(errorMessage != 0)
+            binding.registerErrorMessage.setText(errorMessage)
     }
 
     private fun openLoginActivity() {
