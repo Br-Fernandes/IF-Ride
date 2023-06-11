@@ -36,7 +36,7 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         binding.txtLoginActivity.setOnClickListener {
-            //openLoginActivity()
+            openLoginActivity()
         }
     }
 
@@ -80,6 +80,7 @@ class RegisterActivity : AppCompatActivity() {
                                         .set(newUser)
                                         .addOnCompleteListener { dbTask ->
                                             if (dbTask.isSuccessful) {
+                                                openLoginActivity()
                                                 Log.d(TAG, "O documento foi adicionado com sucesso")
                                                 apiService.addUser(userInfo) {
                                                     if (it?.userEmail != null) {
@@ -125,5 +126,6 @@ class RegisterActivity : AppCompatActivity() {
     private fun openLoginActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
+        finish()
     }
 }

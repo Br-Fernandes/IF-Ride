@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cesar.ifride.adapters.AdapterRideAsDriver
 import com.example.cesar.ifride.adapters.AdapterRideAsPassenger
 import com.example.cesar.ifride.databinding.ActivityMineRidesBinding
 import com.example.cesar.ifride.models.RideModel
+import com.example.cesar.ifride.utils.AccountSideBar
 import com.example.cesar.ifride.utils.Util
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -24,6 +26,7 @@ class MineRidesActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityMineRidesBinding
     private lateinit var resultsRC: RecyclerView
+    private lateinit var drawerLayout: DrawerLayout
 
     companion object {
         private var instance: MineRidesActivity?  = null
@@ -40,6 +43,7 @@ class MineRidesActivity : AppCompatActivity() {
         db = Firebase.firestore
         auth = FirebaseAuth.getInstance()
         resultsRC = binding.rcResults2
+        drawerLayout = findViewById(R.id.container_drawer)
         instance = this
 
         MainActivity.getInstance()!!.verifyAuthetication()
@@ -205,11 +209,8 @@ class MineRidesActivity : AppCompatActivity() {
                     true
                 }
                 R.id.account -> {
-                    val intent = Intent(this, AccountActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
+                    AccountSideBar.configureSideBar(drawerLayout)
                     true
-                    finish()
                 }
                 else -> Unit
             }

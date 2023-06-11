@@ -109,7 +109,7 @@ class AdapterRide(
                     Util.dpToPx(context!!, 90f).toInt(),
                     Util.dpToPx(context, 450f).toInt()
                 )
-                animator.duration = 1000
+                animator.duration = 800
 
                 animator.addUpdateListener { animation ->
                     val height = animation.animatedValue as Int

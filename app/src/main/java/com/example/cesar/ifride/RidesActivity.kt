@@ -40,6 +40,7 @@ class RidesActivity : AppCompatActivity() {
         MainActivity.getInstance()!!.verifyAuthetication()
 
         chosenCity = intent.getStringExtra("city").toString()
+        binding.txtChooseDirections.text = "$chosenCity - Caronas Disponíveis"
 
         putOneWayRides()
 

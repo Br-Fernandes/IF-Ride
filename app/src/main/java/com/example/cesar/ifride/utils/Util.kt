@@ -62,7 +62,7 @@ class Util {
 
         fun linearLayoutAnimator(context: Context ,layout: LinearLayout) {
             val animator = ValueAnimator.ofInt(
-                dpToPx(context!!, 80f).toInt(),
+                dpToPx(context!!, 100f).toInt(),
                 dpToPx(context, 450f).toInt()
             )
             animator.duration = 0
