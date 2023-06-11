@@ -1,7 +1,5 @@
 package com.example.cesar.ifride.adapters
 
-import android.animation.ValueAnimator
-import android.content.Context
 import android.util.Log
 import android.view.*
 import android.widget.Button
@@ -17,12 +15,12 @@ import com.google.firebase.ktx.Firebase
 
 class AdapterRideAsPassenger(
 
-    private val context: Context?,
+    private val activity: MineRidesActivity?,
     private val ridesList: Map<String, RideModel>
 
 ) : RecyclerView.Adapter<AdapterRideAsPassenger.MyViewHolder>() {
 
-    constructor() : this(context = null, ridesList = emptyMap())
+    constructor() : this(activity = null, ridesList = emptyMap())
 
     private val adapterRide = AdapterRide()
 
@@ -43,16 +41,16 @@ class AdapterRideAsPassenger(
     }
 
     private fun putRide(rideLayout: LinearLayout ,key: String,ride: RideModel) {
-        Util.linearLayoutAnimator(context!!,rideLayout)
+        Util.linearLayoutAnimator(activity!!.baseContext,rideLayout)
 
-        rideLayout.addView(adapterRide.setDateAndPrice(this.context,ride))
-        rideLayout.addView(adapterRide.setDriverAndSeats(this.context,ride))
+        rideLayout.addView(adapterRide.setDateAndPrice(this.activity.baseContext,ride))
+        rideLayout.addView(adapterRide.setDriverAndSeats(this.activity.baseContext,ride))
         rideLayout.addView(setCancelRideBtn(key, ride))
     }
 
     private fun setCancelRideBtn(key: String,ride: RideModel): LinearLayout {
-        var linearLayout = Util.standardLinearLayout(context)
-        var confirmBtn = Button(ContextThemeWrapper(context, R.style.ride_confirm_btn))
+        var linearLayout = Util.standardLinearLayout(activity!!.baseContext)
+        var confirmBtn = Button(ContextThemeWrapper(activity.baseContext, R.style.ride_confirm_btn))
 
         confirmBtn.apply {
             text = resources.getText(R.string.giveup_ride_btn)
@@ -89,7 +87,7 @@ class AdapterRideAsPassenger(
                     )
 
                     db.collection("Rides").document(key).update(update)
-                    MineRidesActivity.getInstance()!!.seeRidesAsPassenger()
+                    activity!!.seeRidesAsPassenger()
                 }
                 .addOnFailureListener { e ->
                     Log.d("TAG", "Falha ao encontrar documento pela key")

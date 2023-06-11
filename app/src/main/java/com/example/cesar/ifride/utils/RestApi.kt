@@ -3,7 +3,7 @@ package com.example.cesar.ifride.utils
 import com.example.cesar.ifride.entities.UserInfo
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.DELETE
+
 import retrofit2.http.Headers
 import retrofit2.http.POST
 

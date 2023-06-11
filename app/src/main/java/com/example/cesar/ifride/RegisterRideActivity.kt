@@ -8,10 +8,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
-import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+
 import com.example.cesar.ifride.databinding.ActivityRegisterRideBinding
 import com.example.cesar.ifride.models.RideModel
 import com.example.cesar.ifride.utils.MoneyTextWatcher
@@ -39,8 +37,6 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
         drawerLayout = findViewById(R.id.container_drawer)
 
         MainActivity.getInstance()!!.verifyAuthetication()
-
-        verifyIsDriver()
 
         configureBottomNavigation()
 
@@ -85,6 +81,9 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
 
         db.collection("Rides").add(newRide)
             .addOnSuccessListener {
+                var intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
                 Log.d("TAG", "Deu bão")
             }
             .addOnFailureListener { e ->
@@ -174,18 +173,6 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
 
         binding.txtSavedDateHour.text = Util.formatDate("$savedDay-$savedMonth-$savedYear-$savedHour-$savedMinute")
         binding.txtSavedDateHour.visibility = View.VISIBLE
-    }
-
-    fun verifyIsDriver() {
-        val query = Util.db.collection("Users").whereEqualTo("email", Util.auth.currentUser!!.email)
-        query.get().addOnSuccessListener { querySnapshot ->
-            val value = querySnapshot.documents[0].get("isDriver").toString().toBoolean()
-
-            if (!value) {
-                val intent = Intent(this, RegisterDriverActivity::class.java)
-                startActivity(intent)
-            }
-        }
     }
 
     private fun configureBottomNavigation() {

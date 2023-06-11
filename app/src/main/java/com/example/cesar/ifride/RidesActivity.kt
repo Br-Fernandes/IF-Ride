@@ -7,11 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
 import android.util.Log
-import android.widget.FrameLayout
-import android.widget.LinearLayout
 
 import android.widget.TextView
-import android.widget.Toolbar
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +21,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.getField
 import com.google.firebase.ktx.Firebase
 
 class RidesActivity : AppCompatActivity() {
@@ -46,7 +44,7 @@ class RidesActivity : AppCompatActivity() {
         MainActivity.getInstance()!!.verifyAuthetication()
 
         chosenCity = intent.getStringExtra("city").toString()
-        binding.txtChooseDirections.text = "$chosenCity - Caronas Disponíveis"
+        binding.txtChooseDirections.text = "$chosenCity  -  Caronas Disponíveis"
 
         initToolBarFragment()
 
@@ -103,7 +101,7 @@ class RidesActivity : AppCompatActivity() {
         changeViewColors(binding.txtOption1)
     }
 
-    private fun putReturnRides() {
+    fun putReturnRides() {
         resultsRC.removeAllViews()
 
         val ridesList: MutableMap<String, RideModel> = mutableMapOf()
@@ -115,9 +113,11 @@ class RidesActivity : AppCompatActivity() {
         queryReturn.get()
             .addOnSuccessListener { documents ->
                 for(document in documents) {
-                    val ride = document.toObject(RideModel::class.java)
+                    if (document.getField<Int>("availableCarSeats")!! > 0) {
+                        val ride = document.toObject(RideModel::class.java)
 
-                    ridesList[document.id] = ride
+                        ridesList[document.id] = ride
+                    }
                 }
                 initRecyclerView(ridesList)
 

@@ -27,14 +27,6 @@ class MineRidesActivity : AppCompatActivity() {
     private lateinit var resultsRC: RecyclerView
     private lateinit var drawerLayout: DrawerLayout
 
-    companion object {
-        private var instance: MineRidesActivity?  = null
-
-        fun getInstance(): MineRidesActivity? {
-            return instance
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMineRidesBinding.inflate(layoutInflater)
@@ -43,7 +35,6 @@ class MineRidesActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         resultsRC = binding.rcResults2
         drawerLayout = findViewById(R.id.container_drawer)
-        instance = this
 
         binding.txtChooseRidesOption.text = "Ver suas Caronas como:"
 
@@ -112,7 +103,7 @@ class MineRidesActivity : AppCompatActivity() {
         personalizeBtn(binding.txtPassengerOption)
     }
 
-    private fun seeRidesAsDriver() {
+    fun seeRidesAsDriver() {
         resultsRC.removeAllViews()
 
         val currentUserEmail = auth.currentUser!!.email

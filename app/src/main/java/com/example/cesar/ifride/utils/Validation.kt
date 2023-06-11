@@ -1,13 +1,9 @@
 package com.example.cesar.ifride.utils
 
-import com.google.android.gms.common.api.Api
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.core.FirestoreClient
+
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.util.concurrent.Future
+
 
 class Validation {
 
