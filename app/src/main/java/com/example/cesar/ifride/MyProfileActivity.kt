@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.example.cesar.ifride.databinding.ActivityMyProfileBinding
+import com.example.cesar.ifride.utils.Util
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -44,7 +45,7 @@ class MyProfileActivity : AppCompatActivity() {
 
             registrationValue.text = documentUser.getString("registration")
             emailValue.text = documentUser.getString("email")
-            phoneValue.text = documentUser.getString("phone")
+            phoneValue.text = Util.phoneNumberFormatted(documentUser.getString("phone").toString())
 
             if (documentUser.getBoolean("isDriver") == true) {
                 binding.rlDriver.visibility = View.VISIBLE
@@ -57,11 +58,7 @@ class MyProfileActivity : AppCompatActivity() {
                     carColorValue.text = documentDriver.getString("carColor")
                     plate.text = documentDriver.getString("plate")
                 }
-
             }
-
-
         }
-
     }
 }

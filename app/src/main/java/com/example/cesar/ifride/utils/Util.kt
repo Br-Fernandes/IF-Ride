@@ -63,7 +63,7 @@ class Util {
         fun linearLayoutAnimator(context: Context ,layout: LinearLayout) {
             val animator = ValueAnimator.ofInt(
                 dpToPx(context!!, 100f).toInt(),
-                dpToPx(context, 450f).toInt()
+                dpToPx(context, 410f).toInt()
             )
             animator.duration = 0
 
@@ -91,6 +91,13 @@ class Util {
                     callback.invoke(true)
                 }
             }
+        }
+
+        fun phoneNumberFormatted(phoneNumber: String): String {
+            val countryCode = phoneNumber.substring(0, 2)
+            val firstBlock = phoneNumber.substring(2, 7)
+            val secondBlock = phoneNumber.substring(7, 11)
+            return "($countryCode) $firstBlock $secondBlock"
         }
     }
 }

@@ -7,8 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
 import android.util.Log
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 
 import android.widget.TextView
+import android.widget.Toolbar
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +21,7 @@ import com.example.cesar.ifride.databinding.ActivityRidesBinding
 import com.example.cesar.ifride.models.RideModel
 
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -28,6 +32,7 @@ class RidesActivity : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
     private lateinit var chosenCity: String
     private lateinit var resultsRC: RecyclerView
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +40,7 @@ class RidesActivity : AppCompatActivity() {
         setContentView(binding.root)
         FirebaseApp.initializeApp(this)
         db = Firebase.firestore
+        auth = FirebaseAuth.getInstance()
         resultsRC = binding.rcResults
 
         MainActivity.getInstance()!!.verifyAuthetication()
@@ -42,45 +48,65 @@ class RidesActivity : AppCompatActivity() {
         chosenCity = intent.getStringExtra("city").toString()
         binding.txtChooseDirections.text = "$chosenCity - Caronas Disponíveis"
 
+        initToolBarFragment()
+
         putOneWayRides()
 
-        binding.txtOneWayOption.setOnClickListener{
+
+        binding.txtOption1.setOnClickListener{
             putOneWayRides()
         }
 
-        binding.txtReturnOption.setOnClickListener{
+        binding.txtOption2.setOnClickListener{
             putReturnRides()
         }
+
+
     }
 
-    private fun putOneWayRides() {
+
+    fun putOneWayRides() {
         resultsRC.removeAllViews()
 
-        val ridesList: MutableList<RideModel> = mutableListOf()
+        val ridesList: MutableMap<String, RideModel> = mutableMapOf()
+
+        val queryCurrentUser = db.collection("Users").whereEqualTo("email", auth.currentUser!!.email)
 
         val queryOneWay = db.collection("Rides")
             .whereEqualTo("city", chosenCity)
             .whereEqualTo("direction", "Ida")
 
-        queryOneWay.get()
-            .addOnSuccessListener { documents ->
-                for(document in documents) {
-                    val ride = document.toObject(RideModel::class.java)
-                    ridesList.add(ride)
-                }
-                initRecyclerView(ridesList)
 
+        queryCurrentUser.get().addOnSuccessListener { user ->
+            if (!user.isEmpty) {
+                val userDocument = user.documents[0]
+
+                queryOneWay.get()
+                    .addOnSuccessListener { documents ->
+                        for(document in documents) {
+                            val passengers = document.get("passengers") as? ArrayList<String> ?: arrayListOf()
+
+                            if (!passengers.contains(userDocument.getString("registration"))) {
+                                val ride = document.toObject(RideModel::class.java)
+
+                                ridesList[document.id] = ride
+                            }
+                        }
+                        initRecyclerView(ridesList)
+
+                    }
+                    .addOnFailureListener {exception ->
+                        Log.d(TAG, "deu ruim", exception)
+                    }
             }
-            .addOnFailureListener {exception ->
-                Log.d(TAG, "deu ruim", exception)
-            }
-        personalizeBtn(binding.txtOneWayOption)
+        }
+        changeViewColors(binding.txtOption1)
     }
 
     private fun putReturnRides() {
         resultsRC.removeAllViews()
 
-        val ridesList: MutableList<RideModel> = mutableListOf()
+        val ridesList: MutableMap<String, RideModel> = mutableMapOf()
 
         val queryReturn = db.collection("Rides")
             .whereEqualTo("city", chosenCity)
@@ -89,25 +115,26 @@ class RidesActivity : AppCompatActivity() {
         queryReturn.get()
             .addOnSuccessListener { documents ->
                 for(document in documents) {
-                    val ride  = document.toObject(RideModel::class.java)
-                    ridesList.add(ride)
+                    val ride = document.toObject(RideModel::class.java)
+
+                    ridesList[document.id] = ride
                 }
                 initRecyclerView(ridesList)
 
             }.addOnFailureListener {exception ->
             Log.d(TAG, "deu ruim também", exception)
         }
-        personalizeBtn(binding.txtReturnOption)
+        changeViewColors(binding.txtOption2)
     }
 
-    private fun initRecyclerView(ridesList: MutableList<RideModel>) {
+    private fun initRecyclerView(ridesList: Map<String, RideModel>) {
         resultsRC.layoutManager = LinearLayoutManager(this)
         resultsRC.setHasFixedSize(true)
         resultsRC.adapter = AdapterRide(this, ridesList)
     }
 
-    private fun personalizeBtn(txtView: TextView) {
-        val linearLayout = binding.llOptionsDirections
+    private fun changeViewColors( txtView: TextView) {
+        val linearLayout = binding.llOptions
         val currentIndex = linearLayout.indexOfChild(txtView)
         val previousTextView: TextView? = linearLayout.getChildAt(currentIndex - 1) as? TextView
         val nextTextView: TextView? = linearLayout.getChildAt(currentIndex + 1) as? TextView
@@ -117,18 +144,27 @@ class RidesActivity : AppCompatActivity() {
         if (txtView.text == "Ida") {
             if (nextTextView != null) {
                 txtView.setBackgroundResource(R.drawable.border_directions_left_selected)
-                nextTextView.setTextColor(resources.getColor(R.color.black))
+                txtView.setTextColor(resources.getColor(R.color.white_smoke))
                 nextTextView.setBackgroundResource(R.drawable.border_directions_right)
-                nextTextView.setTextColor(resources.getColor(R.color.white))
+                nextTextView.setTextColor(resources.getColor(R.color.black))
             }
         } else {
             if (previousTextView != null) {
                 txtView.setBackgroundResource(R.drawable.border_directions_right_selected)
-                txtView.setTextColor(resources.getColor(R.color.black))
+                txtView.setTextColor(resources.getColor(R.color.white_smoke))
                 previousTextView.setBackgroundResource(R.drawable.border_directions_left)
-                previousTextView.setTextColor(resources.getColor(R.color.white))
+                previousTextView.setTextColor(resources.getColor(R.color.black))
             }
         }
+    }
+
+    private fun initToolBarFragment() {
+        val fragmentManager = (this as AppCompatActivity).supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        val toolbarFragment = ToolBarFragment()
+
+        fragmentTransaction.replace(R.id.fragment_toolbar, toolbarFragment)
+        fragmentTransaction.commit()
     }
 }
 

@@ -7,6 +7,12 @@
     tools:context=".RegisterDriverActivity">
 
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_tool_bar"/>
 
     <TextView
         android:id="@+id/tv_title_register_driver"
@@ -15,10 +21,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="30dp"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_toolbar"
         android:text="@string/title_register_driver"
         android:textSize="25sp"
-        android:textColor="@color/black">
+        android:textColor="@color/white">
 
     </TextView>
 

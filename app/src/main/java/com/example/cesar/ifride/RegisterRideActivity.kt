@@ -14,7 +14,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.cesar.ifride.databinding.ActivityRegisterRideBinding
 import com.example.cesar.ifride.models.RideModel
-import com.example.cesar.ifride.utils.AccountSideBar
 import com.example.cesar.ifride.utils.MoneyTextWatcher
 import com.example.cesar.ifride.utils.Util
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -112,7 +111,7 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
             R.array.cities_array,
             android.R.layout.simple_spinner_item
         ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            adapter.setDropDownViewResource(R.layout.layout_dropdown)
             spinner.adapter = adapter
         }
     }
@@ -125,7 +124,7 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
             R.array.direction_array,
             android.R.layout.simple_spinner_item
         ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            adapter.setDropDownViewResource(R.layout.layout_dropdown)
             spinner.adapter = adapter
         }
     }

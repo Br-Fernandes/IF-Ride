@@ -10,10 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cesar.ifride.adapters.AdapterRideAsDriver
 import com.example.cesar.ifride.adapters.AdapterRideAsPassenger
-import com.example.cesar.ifride.databinding.ActivityMineRidesBinding
 import com.example.cesar.ifride.models.RideModel
-import com.example.cesar.ifride.utils.AccountSideBar
 import com.example.cesar.ifride.utils.Util
+import com.example.cesar.ifride.databinding.ActivityMineRidesBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -46,6 +45,8 @@ class MineRidesActivity : AppCompatActivity() {
         drawerLayout = findViewById(R.id.container_drawer)
         instance = this
 
+        binding.txtChooseRidesOption.text = "Ver suas Caronas como:"
+
         MainActivity.getInstance()!!.verifyAuthetication()
 
         seeRidesAsPassenger()
@@ -64,6 +65,8 @@ class MineRidesActivity : AppCompatActivity() {
                 }
             }
         }
+
+        initToolBarFragment()
 
         configureBottomNavigation()
     }
@@ -163,18 +166,27 @@ class MineRidesActivity : AppCompatActivity() {
         if (txtView.text == "Passageiro") {
             if (nextTextView != null) {
                 txtView.setBackgroundResource(R.drawable.border_directions_left_selected)
-                nextTextView.setTextColor(resources.getColor(R.color.black))
+                txtView.setTextColor(resources.getColor(R.color.white_smoke))
                 nextTextView.setBackgroundResource(R.drawable.border_directions_right)
-                nextTextView.setTextColor(resources.getColor(R.color.white))
+                nextTextView.setTextColor(resources.getColor(R.color.black))
             }
         } else {
             if (previousTextView != null) {
                 txtView.setBackgroundResource(R.drawable.border_directions_right_selected)
-                txtView.setTextColor(resources.getColor(R.color.black))
+                txtView.setTextColor(resources.getColor(R.color.white_smoke))
                 previousTextView.setBackgroundResource(R.drawable.border_directions_left)
-                previousTextView.setTextColor(resources.getColor(R.color.white))
+                previousTextView.setTextColor(resources.getColor(R.color.black))
             }
         }
+    }
+
+    private fun initToolBarFragment() {
+        val fragmentManager = (this as AppCompatActivity).supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        val toolbarFragment = ToolBarFragment()
+
+        fragmentTransaction.replace(R.id.fragment_toolbar, toolbarFragment)
+        fragmentTransaction.commit()
     }
 
 

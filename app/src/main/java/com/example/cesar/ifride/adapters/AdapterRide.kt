@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
-import androidx.core.view.marginRight
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cesar.ifride.R
 import com.example.cesar.ifride.models.RideModel
@@ -19,19 +18,16 @@ import com.example.cesar.ifride.utils.Util
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 
 class AdapterRide(
 
     private val context: Context?,
-    private val ridesList: List<RideModel>
+    private val ridesList: Map<String, RideModel>
 
 ) : RecyclerView.Adapter<AdapterRide.MyViewHolder>() {
 
-    constructor() : this(context = null, ridesList = emptyList())
+    constructor() : this(context = null, ridesList = emptyMap())
 
     var isOpened = false
     var db = Firebase.firestore
@@ -46,14 +42,13 @@ class AdapterRide(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val ride = ridesList[position]
-
-        putRide(this.context,holder.rideLayout, ride)
+        val (key, ride) = ridesList.entries.elementAt(position)
+        putRide(this.context ,holder.rideLayout, key, ride)
     }
 
     override fun getItemCount() = ridesList.size
 
-    public fun putRide(context: Context?,linearLayout: LinearLayout,ride: RideModel) {
+    public fun putRide(context: Context?,linearLayout: LinearLayout, key: String, ride: RideModel) {
         Util.removeLinearLayoutChildren(linearLayout)
 
         val dateHourLayout = Util.standardLinearLayout(context!!)
@@ -85,7 +80,7 @@ class AdapterRide(
             setTextColor(context.getColor(R.color.dark_gray))
         }
         priceRide.apply {
-            text = ride.price
+            text = "R$ ${ride.price}"
             setTextAppearance(R.style.ride_value_text)
             setTextColor(context.getColor(R.color.light_gray))
             gravity = Gravity.CENTER
@@ -99,10 +94,10 @@ class AdapterRide(
         linearLayout.addView(dateHourLayout)
         linearLayout.addView(priceLayout)
 
-        onOpenRideInformatins(context,linearLayout, ride)
+        onOpenRideInformatins(context,linearLayout, key ,ride)
     }
 
-    public fun onOpenRideInformatins( context: Context,rideLayout: LinearLayout, ride: RideModel) {
+    public fun onOpenRideInformatins( context: Context,rideLayout: LinearLayout, key: String, ride: RideModel) {
         rideLayout.setOnClickListener {
             if (!isOpened){
                 val animator = ValueAnimator.ofInt(
@@ -118,18 +113,18 @@ class AdapterRide(
                 }
                 animator.start()
                 Util.removeLinearLayoutChildren(rideLayout)
-                putRideInformations(context,rideLayout, ride)
+                putRideInformations(context,rideLayout, key ,ride)
                 isOpened = true
             }
         }
     }
 
-    public fun putRideInformations(context: Context, rideLayout: LinearLayout, ride: RideModel) {
+    public fun putRideInformations(context: Context, rideLayout: LinearLayout, key: String, ride: RideModel) {
         rideLayout.orientation = LinearLayout.VERTICAL
-        var closeBtn = setCloseBtn(context,rideLayout,ride)
+        var closeBtn = setCloseBtn(context,rideLayout, key ,ride)
         var dateAndPrice =  setDateAndPrice(context,ride)
         var driverAndSeats = setDriverAndSeats(context,ride)
-        var confirmBtn = setConfirmBtn(context,ride)
+        var confirmBtn = setConfirmBtn(context, key ,ride)
 
         rideLayout.addView(closeBtn)
         rideLayout.addView(dateAndPrice)
@@ -137,7 +132,7 @@ class AdapterRide(
         rideLayout.addView(confirmBtn)
     }
 
-    public fun setCloseBtn(context: Context, rideLayout: LinearLayout, ride: RideModel): LinearLayout {
+    public fun setCloseBtn(context: Context, rideLayout: LinearLayout, key: String , ride: RideModel): LinearLayout {
         var linearLayout = Util.standardLinearLayout(this.context)
         linearLayout.apply {
             layoutParams = LinearLayout.LayoutParams(
@@ -164,7 +159,7 @@ class AdapterRide(
                 )
             }
         }
-        onCloseRideInformations(imageView, rideLayout, ride)
+        onCloseRideInformations(imageView, rideLayout, key ,ride)
         linearLayout.addView(imageView)
 
         return linearLayout
@@ -179,6 +174,7 @@ class AdapterRide(
         var dateHourLabel = TextView(context)
         var price = TextView(context)
         var priceLabel = TextView(context)
+
 
         dateHourLabel.apply {
             text = context!!.getString(R.string.date_hour_label)
@@ -197,7 +193,7 @@ class AdapterRide(
             textAlignment = View.TEXT_ALIGNMENT_CENTER
         }
         price.apply {
-            text = ride.price.toString()
+            text = "R$ ${ride.price}"
             setTextAppearance(R.style.ride_value_text)
             gravity = Gravity.CENTER
         }
@@ -272,7 +268,7 @@ class AdapterRide(
         return linearLayout
     }
 
-    private fun setConfirmBtn(context: Context, ride: RideModel): LinearLayout {
+    private fun setConfirmBtn(context: Context, key: String, ride: RideModel): LinearLayout {
         var linearLayout = Util.standardLinearLayout(context)
         var confirmBtn = Button(ContextThemeWrapper(context, R.style.ride_confirm_btn))
 
@@ -281,7 +277,7 @@ class AdapterRide(
             setBackgroundResource(R.drawable.border_confirm_ride)
         }
 
-        confirmBtnAction(confirmBtn, ride)
+        confirmBtnAction(confirmBtn, key, ride)
 
         linearLayout.gravity = Gravity.CENTER
         linearLayout.addView(confirmBtn)
@@ -289,7 +285,7 @@ class AdapterRide(
         return linearLayout
     }
 
-    private fun confirmBtnAction(confirmBtn: Button, ride: RideModel) {
+    private fun confirmBtnAction(confirmBtn: Button, key: String, ride: RideModel) {
         confirmBtn.setOnClickListener {
             val db = Firebase.firestore
             val auth = FirebaseAuth.getInstance()
@@ -303,9 +299,9 @@ class AdapterRide(
 
                 val updatedAvailableCarSeats = ride.availableCarSeats - 1
 
-                val queryRide = db.collection("Rides").whereEqualTo("driverRegistration", ride.driverRegistration)
+                val queryRide = db.collection("Rides").document(key)
                 queryRide.get().addOnSuccessListener { documentSnapshot ->
-                    val passengers = documentSnapshot.documents[0].get("passengers") as? ArrayList<String> ?: arrayListOf()
+                    val passengers = documentSnapshot.get("passengers") as? ArrayList<String> ?: arrayListOf()
 
                     passengers.add(passengerRef!!)
 
@@ -314,8 +310,7 @@ class AdapterRide(
                         "availableCarSeats" to updatedAvailableCarSeats
                     )
 
-                    val updateRide = documentSnapshot.documents[0].id
-                    db.collection("Rides").document(updateRide).update(updates)
+                    db.collection("Rides").document(key).update(updates)
                         .addOnSuccessListener {
                             Log.d("TAG", "Atualizou a Carona com sucesso")
                         }
@@ -328,7 +323,7 @@ class AdapterRide(
         }
     }
 
-    private fun onCloseRideInformations(imageView: ImageView,rideLayout: LinearLayout, ride: RideModel)     {
+    private fun onCloseRideInformations(imageView: ImageView,rideLayout: LinearLayout, key: String ,ride: RideModel)     {
         imageView.setOnClickListener {
             if (isOpened) {
                 val animator = ValueAnimator.ofInt(
@@ -344,18 +339,10 @@ class AdapterRide(
                 }
                 animator.start()
                 Util.removeLinearLayoutChildren(rideLayout)
-                putRide(this.context, rideLayout, ride)
+                putRide(this.context, rideLayout, key ,ride)
                 rideLayout.orientation = LinearLayout.HORIZONTAL
                 isOpened = false
             }
         }
     }
-
-    /*private suspend fun getDriverName(userReference: String?): String {
-        val db = Firebase.firestore
-        val documentSnapshot = db.collection("Users").document(userReference!!).get().await()
-        Log.d("TAG", documentSnapshot.getString("name").toString())
-        return documentSnapshot.getString("name") ?: ""
-    }*/
-
 }

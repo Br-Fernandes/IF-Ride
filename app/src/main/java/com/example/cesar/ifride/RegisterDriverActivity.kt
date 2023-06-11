@@ -34,6 +34,9 @@ class RegisterDriverActivity : AppCompatActivity() {
         binding.btnSubmitRegisterDriver.setOnClickListener {
             registerDriver()
         }
+
+        initToolBarFragment()
+
     }
 
     private fun registerDriver() {
@@ -116,5 +119,14 @@ class RegisterDriverActivity : AppCompatActivity() {
     private fun openRegisterRide() {
         val intent = Intent(this, RegisterRideActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun initToolBarFragment() {
+        val fragmentManager = (this as AppCompatActivity).supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        val toolbarFragment = ToolBarFragment()
+
+        fragmentTransaction.replace(R.id.fragment_toolbar, toolbarFragment)
+        fragmentTransaction.commit()
     }
 }

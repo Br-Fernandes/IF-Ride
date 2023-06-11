@@ -1,17 +1,12 @@
-package com.example.cesar.ifride.utils
-
 import android.content.Context
 import android.content.Intent
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat.startActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import com.example.cesar.ifride.LoginActivity
-import com.example.cesar.ifride.MyProfileActivity
-import com.example.cesar.ifride.R
-import com.example.cesar.ifride.RegisterActivity
+import com.example.cesar.ifride.*
 import com.example.cesar.ifride.utils.Util.Companion.auth
 import com.example.cesar.ifride.utils.Util.Companion.db
 import com.google.android.material.navigation.NavigationView
@@ -24,10 +19,14 @@ class AccountSideBar {
         fun configureSideBar(drawerLayout: DrawerLayout) {
             drawerLayout.openDrawer(GravityCompat.START)
 
+            drawerLayout.findViewById<ImageView>(R.id.img_arrow_back).setOnClickListener {
+                drawerLayout.closeDrawer(GravityCompat.START)
+            }
+
             val query = db.collection("Users").whereEqualTo("email", auth.currentUser!!.email)
             query.get().addOnSuccessListener { querySnapshot ->
                 val currentUserName = querySnapshot.documents[0].get("name").toString()
-                var txtFullName:TextView = drawerLayout.findViewById(R.id.txt_user_name)
+                var txtFullName: TextView = drawerLayout.findViewById(R.id.txt_user_name)
                 val (firstName) = currentUserName.split(" ")
 
                 txtFullName.text = "Olá, $firstName"
@@ -64,7 +63,7 @@ class AccountSideBar {
                                 }
                             }
                         }
-                        alertDialogBuilder.setNegativeButton("Não") {dialog, which ->
+                        alertDialogBuilder.setNegativeButton("Não") { dialog, which ->
                             dialog.dismiss()
                         }
 
@@ -76,12 +75,6 @@ class AccountSideBar {
                     else -> false
                 }
             }
-
-            val arrowBack = drawerLayout.findViewById<ImageView>(R.id.arrow_back)
-            arrowBack.setOnClickListener {
-                drawerLayout.closeDrawer(GravityCompat.START)
-            }
         }
     }
 }
-

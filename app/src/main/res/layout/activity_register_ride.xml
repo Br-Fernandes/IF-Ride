@@ -46,7 +46,8 @@
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:layout_margin="10dp"
-                android:background="@drawable/border_spinner_direction" />
+                android:background="@drawable/border_spinner_direction"
+                android:dropDownWidth="match_parent"/>
 
             <Spinner
                 android:id="@+id/spinner_direction"
