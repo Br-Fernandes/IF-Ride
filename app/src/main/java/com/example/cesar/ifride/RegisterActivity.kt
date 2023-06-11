@@ -84,9 +84,9 @@ class RegisterActivity : AppCompatActivity() {
                                                 Log.d(TAG, "O documento foi adicionado com sucesso")
                                                 apiService.addUser(userInfo) {
                                                     if (it?.userEmail != null) {
-                                                        print("\n\n\n\nSuccess registering new user")
+                                                        print("Success registering new user")
                                                     } else {
-                                                        print("\n\n\n\nError registering new user")
+                                                        print("Error registering new user")
                                                     }
                                                 }
                                                 openLoginActivity()

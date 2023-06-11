@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.drawerlayout.widget.DrawerLayout
-
 import com.example.cesar.ifride.databinding.ActivityRegisterRideBinding
 import com.example.cesar.ifride.models.RideModel
 import com.example.cesar.ifride.utils.MoneyTextWatcher
@@ -21,6 +20,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
 
+@Suppress("UNUSED_EXPRESSION")
 class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
     private lateinit var binding:  ActivityRegisterRideBinding
@@ -84,10 +84,10 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
                 var intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
-                Log.d("TAG", "Deu bão")
+                Log.d("TAG", "Adicionado com sucesso")
             }
             .addOnFailureListener { e ->
-                Log.d("TAG", "Deu caraionmemo agora", e)
+                Log.d("TAG", "Algo deu errado", e)
             }
     }
 
