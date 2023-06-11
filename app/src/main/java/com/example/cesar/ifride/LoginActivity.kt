@@ -1,6 +1,5 @@
 package com.example.cesar.ifride
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,16 +26,12 @@ class LoginActivity : AppCompatActivity() {
         db = Firebase.firestore
         auth = Firebase.auth
 
-        Log.d("TAG", "asdfoisdafsioadf2222222\n\n\n\n\n\n\n\n\n")
-
-
         binding.txtRegisterActivity.setOnClickListener {
             openRegisterActivity()
         }
 
 
         binding.btnSubmitLogin.setOnClickListener {
-            Log.d("TAG", "asdfoisdafsioadf\n\n\n\n\n\n\n\n\n")
             register()
         }
     }
@@ -46,7 +41,7 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.etPassword.text.toString().trim()
 
         val userRef: DocumentReference
-        Log.d("TAG", "$registration")
+        Log.d("TAG", registration)
 
         if(registration != "")
             userRef = db.collection("Users").document(registration)
@@ -73,12 +68,9 @@ class LoginActivity : AppCompatActivity() {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val user = auth.currentUser
-
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                     } else {
-                        val exception = task.exception
                         binding.loginErrorMessage.setText(R.string.error_message)
                     }
                 }
