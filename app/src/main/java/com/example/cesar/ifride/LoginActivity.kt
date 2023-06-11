@@ -9,6 +9,7 @@ import android.util.Log
 import com.example.cesar.ifride.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -44,23 +45,27 @@ class LoginActivity : AppCompatActivity() {
         val registration = binding.etRegistration.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()
 
+        val userRef: DocumentReference
         Log.d("TAG", "$registration")
 
-        val userRef = db.collection("Users").document(registration)
+        if(registration != "")
+            userRef = db.collection("Users").document(registration)
+        else{
+            binding.loginErrorMessage.setText(R.string.error_message)
+            return
+        }
+
 
         userRef.get()
             .addOnSuccessListener { document ->
-                val email = document.getString("email")
+                if(document.exists()) {
+                    val email = document.getString("email")
+                    loginEmailPassword(email, password)
+                } else {
+                    binding.loginErrorMessage.setText(R.string.error_message)
+                }
 
-                loginEmailPassword(email, password)
             }
-            .addOnFailureListener { e ->
-                Log.d(TAG, "Deu ruim", e)
-            }
-
-        if (!userRef.get().isSuccessful)
-            binding.loginErrorMessage.setText(R.string.error_message)
-
     }
 
     private fun loginEmailPassword(email: String?, password: String) {
@@ -74,6 +79,7 @@ class LoginActivity : AppCompatActivity() {
                         startActivity(intent)
                     } else {
                         val exception = task.exception
+                        binding.loginErrorMessage.setText(R.string.error_message)
                     }
                 }
         }
