@@ -3,5 +3,5 @@
     <string name="btn_login">Entrar</string>
     <string name="text_register_activity_1">Não possui uma conta?</string>
     <string name="text_register_activity_2">  Clique aqui</string>
-    <string name="error_message">Email ou senha inválidos!</string>
+    <string name="error_message">Matrícula ou Senha inválidos!</string>
 </resources>

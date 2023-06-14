@@ -41,11 +41,6 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        Util.checkUserLoggedIn(this)
-    }
-
     private fun register(db: FirebaseFirestore) {
         val registrationNumber = binding.etRegistration.text.toString().trim()
         val email = binding.etEmail.text.toString().trim()

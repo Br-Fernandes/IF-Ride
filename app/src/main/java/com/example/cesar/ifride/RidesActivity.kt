@@ -87,9 +87,11 @@ class RidesActivity : AppCompatActivity() {
                             val passengers = document.get("passengers") as? ArrayList<String> ?: arrayListOf()
 
                             if (!passengers.contains(userDocument.getString("registration"))) {
-                                val ride = document.toObject(RideModel::class.java)
+                                if (document.get("driverRegistration").toString() != userDocument.getString("registration")) {
+                                    val ride = document.toObject(RideModel::class.java)
 
-                                ridesList[document.id] = ride
+                                    ridesList[document.id] = ride
+                                }
                             }
                         }
                         initRecyclerView(ridesList)
