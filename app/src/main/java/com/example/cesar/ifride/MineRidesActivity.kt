@@ -38,8 +38,6 @@ class MineRidesActivity : AppCompatActivity() {
 
         binding.txtChooseRidesOption.text = "Ver suas Caronas como:"
 
-        MainActivity.getInstance()!!.verifyAuthetication()
-
         seeRidesAsPassenger()
 
         binding.txtPassengerOption.setOnClickListener {
@@ -60,6 +58,11 @@ class MineRidesActivity : AppCompatActivity() {
         initToolBarFragment()
 
         configureBottomNavigation()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Util.checkUserLoggedIn(this)
     }
 
 
@@ -134,13 +137,13 @@ class MineRidesActivity : AppCompatActivity() {
         personalizeBtn(binding.txtDriverOption)
     }
 
-    fun initRecyclerViewAsPassenger(ridesList: Map<String, RideModel>) {
+    private fun initRecyclerViewAsPassenger(ridesList: Map<String, RideModel>) {
         resultsRC.layoutManager = LinearLayoutManager(this)
         resultsRC.setHasFixedSize(true)
         resultsRC.adapter = AdapterRideAsPassenger(this, ridesList)
     }
 
-    fun initRecyclerViewAsDriver(ridesList: Map<String, RideModel>) {
+    private fun initRecyclerViewAsDriver(ridesList: Map<String, RideModel>) {
         resultsRC.layoutManager = LinearLayoutManager(this)
         resultsRC.setHasFixedSize(true)
         resultsRC.adapter = AdapterRideAsDriver(this, ridesList)
@@ -212,7 +215,7 @@ class MineRidesActivity : AppCompatActivity() {
                     true
                 }
                 R.id.account -> {
-                    AccountSideBar.configureSideBar(drawerLayout)
+                    AccountSideBar.configureSideBar(this ,drawerLayout)
                     true
                 }
                 else -> Unit

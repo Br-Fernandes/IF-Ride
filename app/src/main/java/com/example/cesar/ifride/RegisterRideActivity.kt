@@ -36,8 +36,6 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
         auth = FirebaseAuth.getInstance()
         drawerLayout = findViewById(R.id.container_drawer)
 
-        MainActivity.getInstance()!!.verifyAuthetication()
-
         configureBottomNavigation()
 
         configureInputs()
@@ -45,6 +43,11 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
         binding.btnRegisterRide.setOnClickListener {
             createNewRide()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Util.checkUserLoggedIn(this)
     }
 
 
@@ -81,7 +84,7 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
 
         db.collection("Rides").add(newRide)
             .addOnSuccessListener {
-                var intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
                 Log.d("TAG", "Adicionado com sucesso")
@@ -128,17 +131,17 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
         }
     }
 
-    var day = 0
-    var month = 0
-    var year = 0
-    var hour = 0
-    var minute = 0
+    private var day = 0
+    private var month = 0
+    private var year = 0
+    private var hour = 0
+    private var minute = 0
 
-    var savedDay = 0
-    var savedMonth = 0
-    var savedYear = 0
-    var savedHour = 0
-    var savedMinute = 0
+    private var savedDay = 0
+    private var savedMonth = 0
+    private var savedYear = 0
+    private var savedHour = 0
+    private var savedMinute = 0
 
     private fun getDateTimeCalendar() {
         val cal = Calendar.getInstance()
@@ -199,7 +202,7 @@ class RegisterRideActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
                     finish()
                 }
                 R.id.account -> {
-                    AccountSideBar.configureSideBar(drawerLayout)
+                    AccountSideBar.configureSideBar(this,drawerLayout)
                     true
                 }
                 else -> Unit

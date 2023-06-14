@@ -26,22 +26,25 @@ class LoginActivity : AppCompatActivity() {
         db = Firebase.firestore
         auth = Firebase.auth
 
+        setupListeners()
+    }
+
+    private fun setupListeners() {
         binding.txtRegisterActivity.setOnClickListener {
             openRegisterActivity()
         }
-
 
         binding.btnSubmitLogin.setOnClickListener {
             register()
         }
     }
 
+
     private fun register() {
         val registration = binding.etRegistration.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()
 
         val userRef: DocumentReference
-        Log.d("TAG", registration)
 
         if(registration != "")
             userRef = db.collection("Users").document(registration)

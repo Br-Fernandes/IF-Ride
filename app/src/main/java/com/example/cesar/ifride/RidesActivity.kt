@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cesar.ifride.adapters.AdapterRide
 import com.example.cesar.ifride.databinding.ActivityRidesBinding
 import com.example.cesar.ifride.models.RideModel
+import com.example.cesar.ifride.utils.Util
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -41,8 +42,6 @@ class RidesActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         resultsRC = binding.rcResults
 
-        MainActivity.getInstance()!!.verifyAuthetication()
-
         chosenCity = intent.getStringExtra("city").toString()
         binding.txtChooseDirections.text = "$chosenCity  -  Caronas Disponíveis"
 
@@ -58,8 +57,11 @@ class RidesActivity : AppCompatActivity() {
         binding.txtOption2.setOnClickListener{
             putReturnRides()
         }
+    }
 
-
+    override fun onResume() {
+        super.onResume()
+        Util.checkUserLoggedIn(this)
     }
 
 

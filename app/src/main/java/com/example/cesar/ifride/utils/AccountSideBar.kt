@@ -1,4 +1,5 @@
 
+import android.app.Activity
 import android.content.Intent
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,7 +17,7 @@ class AccountSideBar {
     val auth = FirebaseAuth.getInstance()
 
     companion object {
-        fun configureSideBar(drawerLayout: DrawerLayout) {
+        fun configureSideBar(activity: Activity,drawerLayout: DrawerLayout) {
             drawerLayout.openDrawer(GravityCompat.START)
 
             drawerLayout.findViewById<ImageView>(R.id.img_arrow_back).setOnClickListener {
@@ -60,6 +61,8 @@ class AccountSideBar {
                                     currentUser.delete()
                                     val intent = Intent(context, RegisterActivity::class.java)
                                     context.startActivity(intent)
+
+                                    activity.finish()
                                 }
                             }
                         }

@@ -26,16 +26,21 @@ class MyProfileActivity : AppCompatActivity() {
         configureMyProfile()
     }
 
-    fun configureMyProfile() {
+    override fun onResume() {
+        super.onResume()
+        Util.checkUserLoggedIn(this)
+    }
+
+    private fun configureMyProfile() {
         val txtFullName = binding.txtFullnameProfile
 
-        var registrationValue = binding.registrationValue
-        var emailValue = binding.emailValue
-        var phoneValue = binding.phoneValue
+        val registrationValue = binding.registrationValue
+        val emailValue = binding.emailValue
+        val phoneValue = binding.phoneValue
 
-        var carModelValue = binding.carModelValue
-        var carColorValue = binding.carColorValue
-        var plate = binding.plateValue
+        val carModelValue = binding.carModelValue
+        val carColorValue = binding.carColorValue
+        val plate = binding.plateValue
 
         val queryCurrentUser = db.collection("Users").whereEqualTo("email", auth.currentUser!!.email)
         queryCurrentUser.get().addOnSuccessListener { querySnapshot ->

@@ -9,6 +9,7 @@ import com.example.cesar.ifride.databinding.ActivityRegisterBinding
 import com.example.cesar.ifride.entities.UserInfo
 import com.example.cesar.ifride.models.UserModel
 import com.example.cesar.ifride.utils.RestApiService
+import com.example.cesar.ifride.utils.Util
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -40,8 +41,12 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        Util.checkUserLoggedIn(this)
+    }
 
-    fun register(db: FirebaseFirestore) {
+    private fun register(db: FirebaseFirestore) {
         val registrationNumber = binding.etRegistration.text.toString().trim()
         val email = binding.etEmail.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()

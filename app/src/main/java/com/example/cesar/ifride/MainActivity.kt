@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.cesar.ifride.databinding.ActivityMainBinding
 import com.example.cesar.ifride.utils.Util
+import com.example.cesar.ifride.utils.Util.Companion.checkUserLoggedIn
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 
@@ -26,18 +27,20 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
-        instance = this
         drawerLayout = findViewById(R.id.container_drawer)
-
-        verifyAuthetication()
 
         configureBottomNavigation()
 
         chooseCities()
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkUserLoggedIn(this)
+    }
+
     private fun chooseCities() {
-        var relativeLayout = binding.rlCities
+        val relativeLayout = binding.rlCities
 
         for (i in 0 until relativeLayout.childCount) {
             val linearLayout = relativeLayout.getChildAt(i) as LinearLayout
@@ -51,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openRidesActivity(city: String) {
-        var intent = Intent(this, RidesActivity::class.java)
+        val intent = Intent(this, RidesActivity::class.java)
         intent.putExtra("city", city)
         startActivity(intent)
     }
@@ -66,47 +69,28 @@ class MainActivity : AppCompatActivity() {
                 R.id.rides -> {
                     Util.verifyIsDriver { isDriver ->
                         if (isDriver) {
-                            val intent = Intent(this, RegisterRideActivity::class.java)
-                            startActivity(intent)
+                            startActivity(Intent(this, RegisterRideActivity::class.java))
                             overridePendingTransition(0, 0)
                             finish()
                         } else {
-                            val intent = Intent(this, RegisterDriverActivity::class.java)
-                            startActivity(intent)
+                            startActivity(Intent(this, RegisterDriverActivity::class.java))
                         }
                     }
                     true
                 }
                 R.id.mine_rides -> {
-                    val intent = Intent(this, MineRidesActivity::class.java)
-                    startActivity(intent)
+                    startActivity(Intent(this, MineRidesActivity::class.java))
                     overridePendingTransition(0, 0)
                     finish()
                     true
                 }
                 R.id.account -> {
-                    AccountSideBar.configureSideBar(drawerLayout)
+                    AccountSideBar.configureSideBar(this, drawerLayout)
                     true
                 }
                 else -> Unit
             }
             false
-        }
-    }
-
-
-    companion object {
-        private var instance: MainActivity?  = null
-
-        fun getInstance(): MainActivity? {
-            return instance
-        }
-    }
-
-    fun verifyAuthetication() {
-        if (Util.verifyCurrentUser()) {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
         }
     }
 }

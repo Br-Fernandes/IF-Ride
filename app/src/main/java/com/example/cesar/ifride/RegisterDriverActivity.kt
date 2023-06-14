@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import com.example.cesar.ifride.databinding.ActivityRegisterDriverBinding
 import com.example.cesar.ifride.models.DriverModel
+import com.example.cesar.ifride.utils.Util
 import com.example.cesar.ifride.utils.Validation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -28,14 +29,17 @@ class RegisterDriverActivity : AppCompatActivity() {
         db = Firebase.firestore
         auth = Firebase.auth
 
-        MainActivity.getInstance()!!.verifyAuthetication()
-
         binding.btnSubmitRegisterDriver.setOnClickListener {
             registerDriver()
         }
 
         initToolBarFragment()
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Util.checkUserLoggedIn(this)
     }
 
     private fun registerDriver() {

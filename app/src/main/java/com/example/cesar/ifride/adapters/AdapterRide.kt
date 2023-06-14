@@ -49,7 +49,7 @@ class AdapterRide(
 
     override fun getItemCount() = ridesList.size
 
-    public fun putRide(context: Context?,linearLayout: LinearLayout, key: String, ride: RideModel) {
+    fun putRide(context: Context?,linearLayout: LinearLayout, key: String, ride: RideModel) {
         Util.removeLinearLayoutChildren(linearLayout)
 
         val dateHourLayout = Util.standardLinearLayout(context!!)
@@ -98,7 +98,7 @@ class AdapterRide(
         onOpenRideInformatins(context,linearLayout, key ,ride)
     }
 
-    public fun onOpenRideInformatins( context: Context,rideLayout: LinearLayout, key: String, ride: RideModel) {
+    fun onOpenRideInformatins( context: Context,rideLayout: LinearLayout, key: String, ride: RideModel) {
         rideLayout.setOnClickListener {
             if (!isOpened){
                 val animator = ValueAnimator.ofInt(
@@ -133,7 +133,7 @@ class AdapterRide(
         rideLayout.addView(confirmBtn)
     }
 
-    public fun setCloseBtn(context: Context, rideLayout: LinearLayout, key: String , ride: RideModel): LinearLayout {
+    fun setCloseBtn(context: Context, rideLayout: LinearLayout, key: String , ride: RideModel): LinearLayout {
         var linearLayout = Util.standardLinearLayout(this.activity!!.baseContext)
         linearLayout.apply {
             layoutParams = LinearLayout.LayoutParams(
@@ -166,7 +166,7 @@ class AdapterRide(
         return linearLayout
     }
 
-    public fun setDateAndPrice(context: Context?, ride: RideModel): LinearLayout {
+    fun setDateAndPrice(context: Context?, ride: RideModel): LinearLayout {
         var linearLayout = Util.standardLinearLayout(context)
         var llDateHourLayout = Util.standardLinearLayout(context)
         var llPriceLayout = Util.standardLinearLayout(context)
@@ -215,7 +215,7 @@ class AdapterRide(
         return linearLayout
     }
 
-    public fun setDriverAndSeats(context: Context?, ride: RideModel): LinearLayout {
+    fun setDriverAndSeats(context: Context?, ride: RideModel): LinearLayout {
         var linearLayout = Util.standardLinearLayout(context)
         var llDriverLayout = Util.standardLinearLayout(context)
         var llCarSeatsLayout = Util.standardLinearLayout(context)

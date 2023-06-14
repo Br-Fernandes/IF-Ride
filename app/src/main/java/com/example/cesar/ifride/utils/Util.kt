@@ -2,9 +2,11 @@ package com.example.cesar.ifride.utils
 
 import android.animation.ValueAnimator
 import android.content.Context
+import android.content.Intent
 
 import android.view.Gravity
 import android.widget.LinearLayout
+import com.example.cesar.ifride.LoginActivity
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -73,8 +75,13 @@ class Util {
             animator.start()
         }
 
-        fun verifyCurrentUser(): Boolean {
-            return (auth.currentUser == null)
+        fun checkUserLoggedIn(context: Context) {
+            val auth = FirebaseAuth.getInstance()
+            if (auth.currentUser == null) {
+                val intent = Intent(context, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                context.startActivity(intent)
+            }
         }
 
         fun verifyIsDriver(callback: (Boolean) -> Unit) {
